@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
@@ -24,6 +25,8 @@ func setupRouter() *gin.Engine {
 }
 
 func main() {
+	_ = os.Setenv("TZ", "Africa/Lagos")
+
 	r := setupRouter()
 	if err := r.Run(":8080"); err != nil {
 		log.Fatal("Something bad is about to happen")

@@ -1,8 +1,13 @@
 module github.com/dark-vinci/linkedout/backend/gateway
-
 go 1.22.1
 
-require github.com/gin-gonic/gin v1.9.1
+//replace github.com/dark-vinci/linkedout/backend/sdk => ./sdk
+
+require (
+	github.com/gin-gonic/gin v1.9.1
+	github.com/google/uuid v1.6.0
+	//github.com/dark-vinci/linkedout/backend/sdk
+)
 
 require (
 	github.com/bytedance/sonic v1.9.1 // indirect
