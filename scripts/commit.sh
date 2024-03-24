@@ -2,6 +2,8 @@
 
 cd ..
 
+pwd
+
 echo "Syncing changes in working directory to staging";
 
 # format all the DOCS
