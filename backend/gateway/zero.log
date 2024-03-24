@@ -1,0 +1,2 @@
+{"level":"debug","GATEWAY":"api","time":"2024-03-24T16:59:42+01:00","message":"something should happen"}
+{"level":"debug","GATEWAY":"api","time":"2024-03-24T16:59:42+01:00","message":"another log in the logger file"}
