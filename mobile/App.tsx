@@ -1,8 +1,11 @@
 import { Text, SafeAreaView } from 'react-native';
+import { JSX } from 'react';
 
-function App() {
+function App(): JSX.Element {
   return (
-    <SafeAreaView>
+    <SafeAreaView
+      style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+    >
       <Text>Welcome to linkedin clone</Text>
     </SafeAreaView>
   );
