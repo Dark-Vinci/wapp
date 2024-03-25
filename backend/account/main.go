@@ -39,7 +39,7 @@ func main() {
 	account.RegisterAccountServer(grpcServer, server.New(&env, appLogger, a))
 
 	listener, err := net.Listen("tcp", fmt.Sprintf(":%s", env.AppPort))
-	appLogger.Info().Msgf("app network is up listening on port :%s", env.AppPort)
+	appLogger.Info().Msgf("app network is up listening on port %s", env.AppPort)
 
 	defer func() {
 		_ = listener.Close()

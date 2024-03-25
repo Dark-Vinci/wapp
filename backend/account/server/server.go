@@ -7,6 +7,7 @@ import (
 	"github.com/rs/zerolog"
 
 	"github.com/dark-vinci/linkedout/backend/account/app"
+	"github.com/dark-vinci/linkedout/backend/sdk/constants"
 	"github.com/dark-vinci/linkedout/backend/sdk/grpc/account"
 	"github.com/dark-vinci/linkedout/backend/sdk/models"
 )
@@ -32,10 +33,11 @@ func New(e *models.Env, z zerolog.Logger, a app.Operations) *Server {
 	}
 }
 
+// Ping for service health checks
 func (s *Server) Ping(_ context.Context, in *account.PingRequest) (*account.PingResponse, error) {
 	s.logger.Info().
-		Str("METHOD", "server.Ping").
-		Str("DATA", in.Data).
+		Str(constants.MethodStrHelper, "server.Ping").
+		Str(constants.FunctionInputHelper, in.Data).
 		Msg("got ping account service request")
 
 	return &account.PingResponse{
