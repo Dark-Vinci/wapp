@@ -1,0 +1,12 @@
+syntax = "proto3";
+package linkedout.account;
+
+option go_package = "github.com/dark-vinci/linkedout/backend/sdk/grpc/account";
+
+//import "google/protobuf/empty.proto";
+import "account/request.proto";
+import "account/response.proto";
+
+service Account {
+  rpc Ping(PingRequest) returns (PingResponse) {}
+}
