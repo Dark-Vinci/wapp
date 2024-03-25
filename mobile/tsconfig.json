@@ -35,7 +35,8 @@
     "paths": {
       "@components": ["./src/Components"],
       "@containers": ["./src/Containers"],
-      "@screens": ["./src/Screen"]
+      "@screens": ["./src/Screen"],
+      "@store": ["./src/store"]
     }
   }
 }
