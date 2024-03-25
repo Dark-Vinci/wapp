@@ -1,6 +1,9 @@
 package server
 
 import (
+	"context"
+	"fmt"
+
 	"github.com/rs/zerolog"
 
 	"github.com/dark-vinci/linkedout/backend/account/app"
@@ -8,7 +11,7 @@ import (
 	"github.com/dark-vinci/linkedout/backend/sdk/models"
 )
 
-const packageName = "server"
+const packageName = "account.server"
 
 // Server struct
 type Server struct {
@@ -27,4 +30,15 @@ func New(e *models.Env, z zerolog.Logger, a app.Operations) *Server {
 		logger: log,
 		app:    a,
 	}
+}
+
+func (s *Server) Ping(_ context.Context, in *account.PingRequest) (*account.PingResponse, error) {
+	s.logger.Info().
+		Str("METHOD", "server.Ping").
+		Str("DATA", in.Data).
+		Msg("got ping account service request")
+
+	return &account.PingResponse{
+		Data: fmt.Sprintf("%s says %s", packageName, in.GetData()),
+	}, nil
 }

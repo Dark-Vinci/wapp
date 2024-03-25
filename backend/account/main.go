@@ -23,7 +23,9 @@ func main() {
 	logger := zerolog.New(os.Stderr).With().Timestamp().Logger()
 	appLogger := logger.With().Str("APP_NAME", AppName).Logger()
 
-	env := models.Env{}
+	env := models.Env{
+		AppPort: "8080",
+	}
 
 	if env.ShouldMigrate {
 		err := utils.Migration(context.Background(), &logger, &env, AppName)
@@ -68,6 +70,6 @@ func main() {
 			appLogger.Info().Msg("integrity issue caused shutdown")
 		}
 
-		utils.ShutdownGracefully(appLogger, grpcServer, 32)
+		utils.ShutdownGracefully(appLogger, grpcServer, nil)
 	}
 }
