@@ -1,14 +1,9 @@
-import { Text, SafeAreaView } from 'react-native';
 import { JSX } from 'react';
 
+import { Splash } from '@screens';
+
 function App(): JSX.Element {
-  return (
-    <SafeAreaView
-      style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-    >
-      <Text>Welcome to linkedin clone</Text>
-    </SafeAreaView>
-  );
+  return <Splash />;
 }
 
 export default App;

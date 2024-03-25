@@ -33,8 +33,9 @@
     "baseUrl": ".",
     "lib": ["es2022", "dom"],
     "paths": {
-      "@components": ["./src/Component"],
-      "@containers": ["./src/Containers"]
+      "@components": ["./src/Components"],
+      "@containers": ["./src/Containers"],
+      "@screens": ["./src/Screen"]
     }
   }
 }
