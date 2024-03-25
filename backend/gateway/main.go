@@ -13,9 +13,9 @@ func setupRouter() *gin.Engine {
 
 	gin.ForceConsoleColor()
 
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"name":     "tomiwa",
+	r.GET("/ping", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, gin.H{
+			"name":     "tomato",
 			"response": "200",
 		})
 	})
@@ -42,5 +42,5 @@ func main() {
 		appLogger.Err(err).Msg("something went wrong")
 	}
 
-	appLogger.Debug().Msg("app axiting")
+	appLogger.Debug().Msg("app exiting")
 }

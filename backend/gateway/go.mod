@@ -8,7 +8,7 @@ require (
 	github.com/gin-gonic/gin v1.9.1
 	github.com/google/uuid v1.6.0
 	github.com/rs/zerolog v1.32.0
-//github.com/dark-vinci/linkedout/backend/sdk
+	//github.com/dark-vinci/linkedout/backend/sdk
 )
 
 require (
