@@ -6,6 +6,7 @@ import (
 	"net"
 	"os"
 	"syscall"
+	"time"
 
 	"github.com/rs/zerolog"
 	"google.golang.org/grpc"
@@ -19,8 +20,55 @@ import (
 
 const AppName = "account"
 
+type DataSaver struct {
+	Data   []string
+	DBChan chan string // Channel to send data to be written to the database
+}
+
+// Write appends the data to the Data slice and sends it to the DBChan for database write
+func (d *DataSaver) Write(p []byte) (int, error) {
+	// Convert byte slice to string and append it to Data slice
+	str := string(p)
+	d.Data = append(d.Data, str)
+
+	// Send the data to be written to the database through a channel
+	go func() {
+		d.DBChan <- str
+	}()
+
+	// Return the number of bytes written and no error
+	return len(p), nil
+}
+
+// Function to simulate database write
+func writeToDB(dbChan <-chan string) {
+	for {
+		data, ok := <-dbChan
+		if !ok {
+			return // Channel closed
+		}
+		// Simulate writing to the database
+		fmt.Println("Writing to database:", data)
+		time.Sleep(1 * time.Second) // Simulating database write time
+	}
+}
+
 func main() {
-	logger := zerolog.New(os.Stderr).With().Timestamp().Logger()
+	_ = os.Setenv("TZ", "Africa/Lagos")
+
+	//zlFile, err := os.Create("./zero.log")
+	//if err != nil {
+	//	panic("cant create file")
+	//}
+
+	myDataSaver := &DataSaver{
+		DBChan: make(chan string),
+	}
+
+	// Start database write Goroutine
+	go writeToDB(myDataSaver.DBChan)
+
+	logger := zerolog.New(myDataSaver).With().Timestamp().Logger()
 	appLogger := logger.With().Str("APP_NAME", AppName).Logger()
 
 	env := models.Env{
