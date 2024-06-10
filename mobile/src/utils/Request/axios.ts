@@ -11,27 +11,26 @@ export const instantiate = (token?: string): AxiosInstance => {
   });
 
   instance.interceptors.request.use(
-    config => {
+    (config) => {
       config.headers.Authorization = `Bearer ${token}`;
       return config;
     },
-    error => {
+    (error) => {
       // Handle request error
       return Promise.reject(error);
-    }
-  )
+    },
+  );
 
   instance.interceptors.response.use(
-    response => {
+    (response) => {
       // You can modify response data here
       return response.data;
     },
-    error => {
+    (error) => {
       // Handle response error
       return Promise.reject(error);
-    }
-  )
+    },
+  );
 
   return instance;
 };
-

@@ -1,4 +1,3 @@
-
 export enum RequestURI {
-  PING =  '/ping'
+  PING = '/ping',
 }

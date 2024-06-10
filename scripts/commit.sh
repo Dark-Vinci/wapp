@@ -1,5 +1,21 @@
 #!/bin/sh
 
+set -e
+set -x
+
+if [[ -z $1 && -z $2 ]]; then
+  echo >&2 "Type and commit message not provided"
+  exit
+fi
+
+if [[ -z $1 ]]; then
+  echo >&2 "Commit type not provided"
+fi
+
+if [[ -z $2 ]]; then
+  echo >&2 "Commit message not provided"
+fi
+
 cd ..
 
 pwd
@@ -14,7 +30,7 @@ for dir in "$directory"/*/; do
     # Extract and print the name of the directory
     dirname=$(basename "$dir")
 
-    cd $dir && go mod tidy
+    cd "$dir" && go mod tidy
 
     cd ..
 done

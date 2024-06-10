@@ -5,10 +5,10 @@ interface IfProps {
   readonly condition: boolean;
 }
 
-export function If({children, condition}: IfProps): JSX.Element {
+export function If({ children, condition }: IfProps): JSX.Element {
   if (condition) {
-    return children as JSX.Element
+    return children as JSX.Element;
   }
 
-  return null as unknown as JSX.Element
+  return null as unknown as JSX.Element;
 }

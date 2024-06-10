@@ -1,1 +1,1 @@
-declare  module 'async-storage'
+declare module 'async-storage';
