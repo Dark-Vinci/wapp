@@ -10,7 +10,9 @@ import (
 
 	"github.com/rs/zerolog"
 	"google.golang.org/grpc"
-
+	
+	"github.com/dark-vinci/isok"
+	
 	"github.com/dark-vinci/linkedout/backend/account/app"
 	"github.com/dark-vinci/linkedout/backend/account/server"
 	"github.com/dark-vinci/linkedout/backend/sdk/grpc/account"
@@ -85,21 +87,27 @@ func main() {
 	// grpc server initialize
 	grpcServer := grpc.NewServer()
 	account.RegisterAccountServer(grpcServer, server.New(&env, appLogger, a))
+	
+	res := isok.ResultFun1(net.Listen("tcp", fmt.Sprintf(":%s", env.AppPort)))
+	
+	if res.IsErr() {
+		appLogger.Fatal().Err(res.UnwrapErr()).Msg("net.Listen failed")
+		panic(res.UnwrapErr())
+	}
+	
+	listener := res.Unwrap()
 
-	listener, err := net.Listen("tcp", fmt.Sprintf(":%s", env.AppPort))
 	appLogger.Info().Msgf("app network is up listening on port %s", env.AppPort)
 
 	defer func() {
 		_ = listener.Close()
 	}()
 
-	if err != nil {
-		appLogger.Fatal().Err(err).Msg("net.Listen failed")
-	}
-
 	appLogger.Info().Msg("serving service over GRPC....")
-	if err = grpcServer.Serve(listener); err != nil {
-		appLogger.Fatal().Err(err).Msg("grpcServer failed to serve")
+	serv := isok.ResultFun0(grpcServer.Serve(listener))
+	
+	if serv.IsErr() {
+		appLogger.Fatal().Err(serv.UnwrapErr()).Msg("grpcServer failed to serve")
 		panic("unable to start service at this time")
 	}
 
@@ -109,7 +117,7 @@ func main() {
 	serverErrors := make(chan error, 1)
 
 	select {
-	case err = <-serverErrors:
+	case err := <-serverErrors:
 		appLogger.Panic().Err(err).Msg("server error")
 	case sig := <-shutdown:
 		appLogger.Info().Msgf("%v : start server shutdown.", sig)

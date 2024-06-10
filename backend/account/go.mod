@@ -5,6 +5,7 @@ replace github.com/dark-vinci/linkedout/backend/sdk => ../sdk
 go 1.22.1
 
 require (
+	github.com/dark-vinci/isok v0.0.0-20240610125516-bfbad745e1f9
 	github.com/dark-vinci/linkedout/backend/sdk v0.0.0-00010101000000-000000000000
 	github.com/pressly/goose/v3 v3.19.2
 	github.com/rs/zerolog v1.32.0

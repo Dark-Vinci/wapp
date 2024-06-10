@@ -2,7 +2,10 @@ module github.com/dark-vinci/linkedout/backend/chats
 
 go 1.22.1
 
-require github.com/pressly/goose/v3 v3.19.2
+require (
+	github.com/dark-vinci/isok v0.0.1
+	github.com/pressly/goose/v3 v3.19.2
+)
 
 require (
 	github.com/mfridman/interpolate v0.0.2 // indirect
