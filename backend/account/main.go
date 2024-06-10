@@ -53,6 +53,14 @@ const AppName = "account"
 // 		time.Sleep(1 * time.Second) // Simulating database write time
 // 	}
 // }
+// 
+// 
+// myDataSaver := &DataSaver{
+// 	DBChan: make(chan string),
+// }
+
+// Start database write Goroutine
+// go writeToDB(myDataSaver.DBChan)
 
 func main() {
 	_ = os.Setenv("TZ", "Africa/Lagos")
@@ -62,13 +70,6 @@ func main() {
 	if f.IsErr() {
 		panic("unable to create logger file")
 	}
-
-	// myDataSaver := &DataSaver{
-	// 	DBChan: make(chan string),
-	// }
-
-	// Start database write Goroutine
-	// go writeToDB(myDataSaver.DBChan)
 
 	logger := zerolog.New(f.Unwrap()).With().Timestamp().Logger()
 	appLogger := logger.With().Str("APP_NAME", AppName).Logger()
