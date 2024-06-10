@@ -13,12 +13,13 @@ import (
 	"github.com/pressly/goose/v3"
 	"github.com/rs/zerolog"
 
+	"github.com/dark-vinci/linkedout/backend/account/env"
 	"github.com/dark-vinci/linkedout/backend/sdk/constants"
-	"github.com/dark-vinci/linkedout/backend/sdk/models"
+	// "github.com/dark-vinci/linkedout/backend/sdk/models"
 	"github.com/dark-vinci/linkedout/backend/sdk/sdkerror"
 )
 
-func Migration(ctx context.Context, logger *zerolog.Logger, env *models.Env, service string) error {
+func Migration(ctx context.Context, logger *zerolog.Logger, env *env.Environment, service string) error {
 	_ = constants.GooseFlag.Parse(os.Args[1:])
 
 	args := constants.GooseFlag.Args()

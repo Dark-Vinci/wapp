@@ -1,4 +1,19 @@
 #!/bin/sh
+set -e
+set -x
+
+if [[ -z $1 && -z $2 ]]; then
+    echo >&2 "Service name and migration name was not provided"
+    exit
+fi
+
+if [[ -z $1 ]]; then 
+    echo >&2 "Service name was not provided"
+fi
+
+if [[ -z $2 ]]; then 
+    echo >&2 "Service migration was not provided"
+fi
 
 case $1 in
   "account")
