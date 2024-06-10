@@ -1,14 +1,3 @@
-{"level":"info","APP_NAME":"account","time":"2024-03-27T05:28:47+01:00","message":"app network is up listening on port 8080"}
-{"level":"info","APP_NAME":"account","time":"2024-03-27T05:28:47+01:00","message":"serving service over GRPC...."}
-{"level":"info","APP_NAME":"account","PACKAGE_NAME":"account.server","METHOD_NME":"server.Ping","FUNCTION_INPUT":"ex","time":"2024-03-27T05:30:28+01:00","message":"got ping account service request"}
-{"level":"info","APP_NAME":"account","PACKAGE_NAME":"account.server","METHOD_NME":"server.Ping","FUNCTION_INPUT":"ex","time":"2024-03-27T05:32:21+01:00","message":"got ping account service request"}
-{"level":"info","APP_NAME":"account","PACKAGE_NAME":"account.server","METHOD_NME":"server.Ping","FUNCTION_INPUT":"ex","time":"2024-03-27T05:32:22+01:00","message":"got ping account service request"}
-{"level":"info","APP_NAME":"account","PACKAGE_NAME":"account.server","METHOD_NME":"server.Ping","FUNCTION_INPUT":"ex","time":"2024-03-27T05:32:22+01:00","message":"got ping account service request"}
-{"level":"info","APP_NAME":"account","PACKAGE_NAME":"account.server","METHOD_NME":"server.Ping","FUNCTION_INPUT":"aliquip ut irure","time":"2024-03-27T05:34:24+01:00","message":"got ping account service request"}
-{"level":"info","APP_NAME":"account","PACKAGE_NAME":"account.server","METHOD_NME":"server.Ping","FUNCTION_INPUT":"aliquip ut irure","time":"2024-03-27T05:34:26+01:00","message":"got ping account service request"}
-{"level":"info","APP_NAME":"account","PACKAGE_NAME":"account.server","METHOD_NME":"server.Ping","FUNCTION_INPUT":"aliquip ut irure","time":"2024-03-27T05:34:27+01:00","message":"got ping account service request"}
-{"level":"info","APP_NAME":"account","PACKAGE_NAME":"account.server","METHOD_NME":"server.Ping","FUNCTION_INPUT":"aliquip ut irure","time":"2024-03-27T05:34:28+01:00","message":"got ping account service request"}
-{"level":"info","APP_NAME":"account","PACKAGE_NAME":"account.server","METHOD_NME":"server.Ping","FUNCTION_INPUT":"aliquip ut irure","time":"2024-03-27T05:34:29+01:00","message":"got ping account service request"}
-{"level":"info","APP_NAME":"account","PACKAGE_NAME":"account.server","METHOD_NME":"server.Ping","FUNCTION_INPUT":"aliquip ut irure","time":"2024-03-27T05:34:29+01:00","message":"got ping account service request"}
-{"level":"info","APP_NAME":"account","PACKAGE_NAME":"account.server","METHOD_NME":"server.Ping","FUNCTION_INPUT":"aliquip ut irure","time":"2024-03-27T05:34:30+01:00","message":"got ping account service request"}
-{"level":"info","APP_NAME":"account","PACKAGE_NAME":"account.server","METHOD_NME":"server.Ping","FUNCTION_INPUT":"aliquip ut irure","time":"2024-03-27T05:34:31+01:00","message":"got ping account service request"}
+{"level":"info","APP_NAME":"account","time":"2024-06-10T14:36:04+01:00","message":"app network is up listening on port 8080"}
+{"level":"info","APP_NAME":"account","time":"2024-06-10T14:36:04+01:00","message":"serving service over GRPC...."}
+{"level":"info","APP_NAME":"account","PACKAGE_NAME":"account.server","METHOD_NME":"server.Ping","FUNCTION_INPUT":"aliquip ut irure","time":"2024-06-10T14:36:29+01:00","message":"got ping account service request"}
