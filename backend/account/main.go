@@ -14,6 +14,7 @@ import (
 	"github.com/dark-vinci/linkedout/backend/account/app"
 	"github.com/dark-vinci/linkedout/backend/account/env"
 	"github.com/dark-vinci/linkedout/backend/account/server"
+	"github.com/dark-vinci/linkedout/backend/sdk/constants"
 	"github.com/dark-vinci/linkedout/backend/sdk/grpc/account"
 	"github.com/dark-vinci/linkedout/backend/sdk/utils"
 )
@@ -21,7 +22,7 @@ import (
 const AppName = "account"
 
 func main() {
-	_ = os.Setenv("TZ", "Africa/Lagos")
+	_ = os.Setenv("TZ", constants.TimeZone)
 
 	f := isok.ResultFun1(os.Create("./zero.log"))
 

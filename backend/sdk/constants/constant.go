@@ -12,4 +12,5 @@ const (
 	MethodStrHelper     = "METHOD_NME"
 	PackageStrHelper    = "PACKAGE_NAME"
 	FunctionInputHelper = "FUNCTION_INPUT"
+	TimeZone = "Africa/Lagos"
 )
