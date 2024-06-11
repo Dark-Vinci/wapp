@@ -9,7 +9,6 @@ import (
 
 	"github.com/rs/zerolog"
 	"google.golang.org/grpc"
-
 	"github.com/dark-vinci/isok"
 
 	"github.com/dark-vinci/linkedout/backend/account/app"
