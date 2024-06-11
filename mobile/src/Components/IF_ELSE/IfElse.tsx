@@ -2,18 +2,14 @@ import { ReactNode, JSX } from 'react';
 
 interface IfElseInterface {
   readonly condition: boolean;
-  readonly IfComponent: ReactNode;
-  readonly ElseComponent: ReactNode;
+  readonly If: ReactNode;
+  readonly El: ReactNode;
 }
 
-export function IfElse({
-  IfComponent,
-  ElseComponent,
-  condition,
-}: IfElseInterface): JSX.Element {
+export function IfElse({ If, El, condition }: IfElseInterface): JSX.Element {
   if (condition) {
-    return IfComponent as JSX.Element;
+    return If as JSX.Element;
   }
 
-  return ElseComponent as JSX.Element;
+  return El as JSX.Element;
 }
