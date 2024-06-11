@@ -1,4 +1,4 @@
-import { JSX, ReactNode } from 'react';
+import React, { JSX, ReactNode } from 'react';
 import { SafeAreaView, View, StyleSheet, Platform } from 'react-native';
 import Constants from 'expo-constants';
 

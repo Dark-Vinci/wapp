@@ -2,6 +2,7 @@ import { JSX, ReactNode } from 'react';
 import ErrorBoundary from 'react-native-error-boundary';
 
 import { FallBack } from '../FallBack';
+import React from 'react';
 
 interface ErrorBoundaryInterface {
   readonly children: ReactNode;
@@ -16,8 +17,7 @@ export function AppErrorBoundary({
 }: ErrorBoundaryInterface): JSX.Element {
   return (
     <ErrorBoundary onError={errorHandler} FallbackComponent={FallBack}>
-      // @ts-ignore
-      {children}
+      {children as any}
     </ErrorBoundary>
   );
 }

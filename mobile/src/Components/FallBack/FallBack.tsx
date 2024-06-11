@@ -1,4 +1,4 @@
-import { TouchableOpacity, Text, View } from 'react-native';
+import React, { TouchableOpacity, Text, View } from 'react-native';
 import { JSX } from 'react';
 
 import { Screen } from '@components';
