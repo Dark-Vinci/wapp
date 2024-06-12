@@ -4,15 +4,15 @@ import (
 	"fmt"
 	"sync"
 
+	"github.com/dark-vinci/isok"
 	"github.com/rs/zerolog"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 
-	"github.com/dark-vinci/isok"
 	"github.com/dark-vinci/linkedout/backend/account/env"
 )
 
-const packageName string = "connection.db"
+const packageName string = "app.connection"
 
 const SLAVE_COUNT = 4
 
