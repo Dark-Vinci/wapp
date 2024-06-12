@@ -11,6 +11,9 @@ type RedisClient struct {
 	Val *redis.Client
 }
 
+type RedisInterface interface {
+}
+
 func (r *RedisClient) Close() {
 	r.Val.Close()
 }

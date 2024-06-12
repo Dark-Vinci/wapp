@@ -9,6 +9,7 @@ import (
 )
 
 const packageName = "account.server"
+const packageNameKey string = "PACKAGE_NAME"
 
 // Server struct
 type Server struct {
@@ -20,7 +21,7 @@ type Server struct {
 
 // New creates a new instance of the Server struct
 func New(e *env.Environment, z zerolog.Logger, a app.Operations) *Server {
-	log := z.With().Str("PACKAGE_NAME", packageName).Logger()
+	log := z.With().Str(packageNameKey, packageName).Logger()
 
 	return &Server{
 		env:    e,

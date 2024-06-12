@@ -12,6 +12,8 @@ type Kafka struct {
 	Reader *kafka.Reader
 }
 
+type KafkaInterface interface{}
+
 func (k *Kafka) Close() {
 	k.Reader.Close()
 	k.Writer.Close()

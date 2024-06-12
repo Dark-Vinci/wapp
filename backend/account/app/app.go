@@ -12,6 +12,7 @@ import (
 const packageName string = "account.app"
 
 type Operations interface {
+	Ping(ctx context.Context, message string) string
 	Signup(ctx context.Context, a int) (*int, error)
 }
 

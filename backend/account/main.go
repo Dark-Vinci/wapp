@@ -40,7 +40,7 @@ func main() {
 		panic(err)
 	}
 
-	a := app.New()
+	a := app.New(&logger, env)
 
 	// grpc server initialize
 	grpcServer := grpc.NewServer()
