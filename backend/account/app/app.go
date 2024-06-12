@@ -32,11 +32,11 @@ func New(z *zerolog.Logger, e *env.Environment) Operations {
 	kafka := connection.NewKafka(*z, e)
 
 	app := &App{
-		red:    red,
-		env:    e,
-		logger: *z,
+		red:       red,
+		env:       e,
+		logger:    *z,
 		userStore: uStore,
-		kafka: kafka,
+		kafka:     kafka,
 	}
 
 	return Operations(app)
