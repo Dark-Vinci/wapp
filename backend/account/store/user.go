@@ -92,12 +92,10 @@ func (u *User) GetUserByID(ctx context.Context, id uuid.UUID) (*U, error) {
 		}(resChan, v)
 	}
 
-	
-
 	select {
 	case user := <-resChan:
 		return &user, nil
-	case e := <- errChan:
+	case e := <-errChan:
 		return nil, e
 	}
 }

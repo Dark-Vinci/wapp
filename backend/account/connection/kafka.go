@@ -19,7 +19,7 @@ func (k *Kafka) Close() {
 	k.Writer.Close()
 }
 
-func New(z zerolog.Logger, e *env.Environment) *Kafka {
+func NewKafka(z zerolog.Logger, e *env.Environment) *Kafka {
 	log := z.With().Str("KEY", "value").Logger()
 
 	w := kafka.Writer{

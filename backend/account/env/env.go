@@ -3,9 +3,10 @@ package env
 import (
 	"os"
 	"strconv"
-)
 
-const packageName = "account.env"
+	"github.com/dark-vinci/linkedout/backend/sdk/constants"
+	"github.com/dark-vinci/linkedout/backend/sdk/utils"
+)
 
 type Environment struct {
 	AppPort          string
@@ -24,40 +25,34 @@ type Environment struct {
 	KafkaURL         string
 }
 
-const (
-	AppPort          string = "APP_PORT"
-	KafkaURL         string = "KAFKA_URL"
-	PgMasterHost     string = "PG_MASTER_HOST"
-	PgMasterPort     string = "PG_MASTER_PORT"
-	PgMasterUser     string = "PG_MASTER_USER"
-	PgMasterPassword string = "PG_MASTER_PASSWORD"
-	PgMasterName     string = "PG_MASTER_NAME"
-	PgSlaveHost      string = "PG_SLAVE_HOST"
-	PgSlavePort      string = "PG_SLAVE_PORT"
-	PgSlaveUser      string = "PG_SLAVE_USER"
-	PgSlavePassword  string = "PG_SLAVE_PASSWORD"
-	PgSlaveName      string = "PG_SLAVE_NAME"
-	ShouldMigrate    string = "SHOULD_MIGRATE"
-)
+func (e *Environment) MigrationConfig() *utils.MigrationConfig {
+	return &utils.MigrationConfig{
+		PgUser:         e.PgMasterUser,
+		PgPassword:     e.PgMasterPassword,
+		PgHost:         e.PgMasterHost,
+		PgPort:         e.PgMasterPort,
+		PgExternalPort: e.PgMasterPort,
+	}
+}
 
 func NewEnv() *Environment {
-	p := os.Getenv(ShouldMigrate)
+	p := os.Getenv(constants.ShouldMigrate)
 	shouldMigrate, _ := strconv.ParseBool(p)
 
 	return &Environment{
-		AppPort:          os.Getenv(AppPort),
-		AppEnvironment:   os.Getenv(AppPort),
+		AppPort:          os.Getenv(constants.AppPort),
+		AppEnvironment:   os.Getenv(constants.AppPort),
 		ShouldMigrate:    shouldMigrate,
-		KafkaURL:         os.Getenv(KafkaURL),
-		PgSlaveHost:      os.Getenv(PgSlaveHost),
-		PgMasterHost:     os.Getenv(PgMasterHost),
-		PgMasterName:     os.Getenv(PgMasterName),
-		PgSlaveName:      os.Getenv(PgSlaveName),
-		PgMasterPort:     os.Getenv(PgMasterPort),
-		PgSlavePort:      os.Getenv(PgSlavePort),
-		PgMasterUser:     os.Getenv(PgMasterUser),
-		PgSlaveUser:      os.Getenv(PgSlaveUser),
-		PgMasterPassword: os.Getenv(PgMasterPassword),
-		PgSlavePassword:  os.Getenv(PgSlavePassword),
+		KafkaURL:         os.Getenv(constants.KafkaURL),
+		PgSlaveHost:      os.Getenv(constants.PgSlaveHost),
+		PgMasterHost:     os.Getenv(constants.PgMasterHost),
+		PgMasterName:     os.Getenv(constants.PgMasterName),
+		PgSlaveName:      os.Getenv(constants.PgSlaveName),
+		PgMasterPort:     os.Getenv(constants.PgMasterPort),
+		PgSlavePort:      os.Getenv(constants.PgSlavePort),
+		PgMasterUser:     os.Getenv(constants.PgMasterUser),
+		PgSlaveUser:      os.Getenv(constants.PgSlaveUser),
+		PgMasterPassword: os.Getenv(constants.PgMasterPassword),
+		PgSlavePassword:  os.Getenv(constants.PgSlavePassword),
 	}
 }

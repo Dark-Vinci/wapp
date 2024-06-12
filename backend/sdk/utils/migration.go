@@ -12,15 +12,21 @@ import (
 
 	"github.com/pressly/goose/v3"
 	"github.com/rs/zerolog"
-	// "github.com/dark-vinci/isok"
-	
-	"github.com/dark-vinci/linkedout/backend/account/env"
+
 	"github.com/dark-vinci/linkedout/backend/sdk/constants"
-	"github.com/dark-vinci/linkedout/backend/sdk/sdkerror"
 	"github.com/dark-vinci/linkedout/backend/sdk/isok"
+	"github.com/dark-vinci/linkedout/backend/sdk/sdkerror"
 )
 
-func Migration(ctx context.Context, logger *zerolog.Logger, env *env.Environment, service string) error {
+type MigrationConfig struct {
+	PgUser         string
+	PgPassword     string
+	PgHost         string
+	PgPort         string
+	PgExternalPort string
+}
+
+func Migration(ctx context.Context, logger *zerolog.Logger, e MigrationConfig, service string) error {
 	_ = constants.GooseFlag.Parse(os.Args[1:])
 
 	args := constants.GooseFlag.Args()
@@ -33,12 +39,12 @@ func Migration(ctx context.Context, logger *zerolog.Logger, env *env.Environment
 	command := args[1]
 
 	connection := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable",
-		os.Getenv(env.PgUser),
-		os.Getenv(env.PgPassword),
-		os.Getenv(env.PgHost),
-		os.Getenv(env.PgExternalPort),
+		e.PgUser,
+		e.PgPassword,
+		e.PgHost,
+		e.PgExternalPort,
 		service)
-	
+
 	dbR := isok.ResultFun1(sql.Open("postgres", connection))
 
 	if dbR.IsErr() {
@@ -70,7 +76,7 @@ func Migration(ctx context.Context, logger *zerolog.Logger, env *env.Environment
 
 	// we want to grant required permissions and privileges after every up - run
 	if command == constants.UP {
-		resRes := isok.ResultFun0(runUpMigrationHook(dbR.Unwrap(), os.Getenv(env.PgUser)))
+		resRes := isok.ResultFun0(runUpMigrationHook(dbR.Unwrap(), os.Getenv(e.PgUser)))
 		if resRes.IsErr() {
 			logger.Err(resRes.UnwrapErr()).Msg("runUpMigrationHook failed")
 			return nil

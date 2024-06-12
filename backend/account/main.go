@@ -15,8 +15,8 @@ import (
 	"github.com/dark-vinci/linkedout/backend/account/server"
 	"github.com/dark-vinci/linkedout/backend/sdk/constants"
 	"github.com/dark-vinci/linkedout/backend/sdk/grpc/account"
-	"github.com/dark-vinci/linkedout/backend/sdk/utils"
 	"github.com/dark-vinci/linkedout/backend/sdk/isok"
+	"github.com/dark-vinci/linkedout/backend/sdk/utils"
 )
 
 const AppName = "account"
@@ -33,20 +33,20 @@ func main() {
 	logger := zerolog.New(f.Unwrap()).With().Timestamp().Logger()
 	appLogger := logger.With().Str("APP_NAME", AppName).Logger()
 
-	env := env.NewEnv()
+	e := env.NewEnv()
 
-	if env.ShouldMigrate {
-		err := utils.Migration(context.Background(), &logger, env, AppName)
+	if e.ShouldMigrate {
+		err := utils.Migration(context.Background(), &logger, *e.MigrationConfig(), AppName)
 		panic(err)
 	}
 
-	a := app.New(&logger, env)
+	a := app.New(&logger, e)
 
 	// grpc server initialize
 	grpcServer := grpc.NewServer()
-	account.RegisterAccountServer(grpcServer, server.New(env, appLogger, a))
+	account.RegisterAccountServer(grpcServer, server.New(e, appLogger, a))
 
-	res := isok.ResultFun1(net.Listen("tcp", fmt.Sprintf(":%s", env.AppPort)))
+	res := isok.ResultFun1(net.Listen("tcp", fmt.Sprintf(":%s", e.AppPort)))
 
 	if res.IsErr() {
 		appLogger.Fatal().Err(res.UnwrapErr()).Msg("net.Listen failed")
@@ -55,7 +55,7 @@ func main() {
 
 	listener := res.Unwrap()
 
-	appLogger.Info().Msgf("app network is up listening on port %s", env.AppPort)
+	appLogger.Info().Msgf("app network is up listening on port %s", e.AppPort)
 
 	defer func() {
 		_ = listener.Close()
