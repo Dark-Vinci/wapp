@@ -2,6 +2,8 @@ module github.com/dark-vinci/linkedout/backend/account
 
 replace github.com/dark-vinci/linkedout/backend/sdk => ../sdk
 
+// replace github.com/dark-vinci/isok => ../../isok
+
 go 1.22.1
 
 require (
@@ -13,12 +15,12 @@ require (
 	github.com/rs/zerolog v1.33.0
 	github.com/segmentio/kafka-go v0.4.47
 	google.golang.org/grpc v1.64.0
-	gorm.io/driver/postgres v1.5.7
+	gorm.io/driver/postgres v1.5.8
 	gorm.io/gorm v1.25.10
 )
 
 require (
-	github.com/cespare/xxhash/v2 v2.2.0 // indirect
+	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect

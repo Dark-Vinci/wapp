@@ -77,26 +77,27 @@ func (u *User) GetUserByID(ctx context.Context, id uuid.UUID) (*U, error) {
 	var errorCount atomic.Uint64
 
 	for _, v := range u.slaves {
-		go func(resChan chan<- U) {
+		go func(resChan chan<- U, v *gorm.DB) {
 			res := U{}
 			r := v.Model(U{ID: id}).First(&res)
 
 			if r.Error != nil {
 				errorCount.Add(1)
-				errChan <- res.Error
+				errChan <- r.Error
 				log.Err(r.Error).Msg("Unable to fetch user by Id")
 				return
 			}
 
 			resChan <- res
-		}(resChan)
+		}(resChan, v)
 	}
+
+	
 
 	select {
 	case user := <-resChan:
 		return &user, nil
-	case errorCount.Load() == 4:
-		e := <-errorChan
+	case e := <- errChan:
 		return nil, e
 	}
 }

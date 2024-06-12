@@ -12,11 +12,12 @@ import (
 
 	"github.com/pressly/goose/v3"
 	"github.com/rs/zerolog"
-	"github.com/dark-vinci/isok"
+	// "github.com/dark-vinci/isok"
 	
 	"github.com/dark-vinci/linkedout/backend/account/env"
 	"github.com/dark-vinci/linkedout/backend/sdk/constants"
 	"github.com/dark-vinci/linkedout/backend/sdk/sdkerror"
+	"github.com/dark-vinci/linkedout/backend/sdk/isok"
 )
 
 func Migration(ctx context.Context, logger *zerolog.Logger, env *env.Environment, service string) error {

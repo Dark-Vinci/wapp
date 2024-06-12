@@ -7,7 +7,6 @@ import (
 	"os"
 	"syscall"
 
-	"github.com/dark-vinci/isok"
 	"github.com/rs/zerolog"
 	"google.golang.org/grpc"
 
@@ -17,6 +16,7 @@ import (
 	"github.com/dark-vinci/linkedout/backend/sdk/constants"
 	"github.com/dark-vinci/linkedout/backend/sdk/grpc/account"
 	"github.com/dark-vinci/linkedout/backend/sdk/utils"
+	"github.com/dark-vinci/linkedout/backend/sdk/isok"
 )
 
 const AppName = "account"
