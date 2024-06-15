@@ -13,6 +13,7 @@ const (
 	PackageStrHelper    = "PACKAGE_NAME"
 	FunctionInputHelper = "FUNCTION_INPUT"
 	TimeZone            = "Africa/Lagos"
+	FunctionNameHelper = "FUNCTION_NAME"
 )
 
 const (
