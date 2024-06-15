@@ -10,7 +10,7 @@ import (
 
 type Environment struct {
 	AppPort          string
-	AppEnvironment   string
+	AppEnvironment   constants.AppEnvironment
 	ShouldMigrate    bool
 	PgMasterPassword string
 	PgMasterHost     string
@@ -40,7 +40,7 @@ func NewEnv() *Environment {
 	shouldMigrate, _ := strconv.ParseBool(p)
 
 	return &Environment{
-		AppPort:          os.Getenv(constants.AppPort),
+		AppPort:          constants.FromStr(os.Getenv(constants.AppPort)),
 		AppEnvironment:   os.Getenv(constants.AppPort),
 		ShouldMigrate:    shouldMigrate,
 		KafkaURL:         os.Getenv(constants.KafkaURL),
