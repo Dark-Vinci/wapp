@@ -2,7 +2,6 @@ package store
 
 import (
 	"context"
-	"sync/atomic"
 	"time"
 
 	"github.com/google/uuid"
@@ -21,16 +20,20 @@ type UserDatabase interface {
 }
 
 type User struct {
-	log    *zerolog.Logger
-	master *gorm.DB
-	slaves []*gorm.DB
+	log            *zerolog.Logger
+	master         *gorm.DB
+	slaves         []*gorm.DB
+	count          int64
+	slaveInstances int
 }
 
 func NewUser(db *connection.DBConn) *UserDatabase {
 	u := User{
-		master: db.Master,
-		slaves: db.Slaves,
-		log:    db.Log,
+		master:         db.Master,
+		slaves:         db.Slaves,
+		log:            db.Log,
+		count:          int64(0),
+		slaveInstances: len(db.Slaves),
 	}
 
 	uu := UserDatabase(u)
@@ -65,6 +68,18 @@ func (u *User) CreateUser(ctx context.Context, user U) (*U, error) {
 	return &user, nil
 }
 
+func (u *User) getSlaveConnection() *gorm.DB {
+	if len(u.slaves) == 0 {
+		return u.master
+	}
+
+	index := u.count % int64(u.slaveInstances)
+
+	u.count++
+
+	return u.slaves[index]
+}
+
 func (u *User) GetUserByID(ctx context.Context, id uuid.UUID) (*U, error) {
 	log := u.log.With().
 		Str("KEY", "store.GetUserByID").
@@ -72,30 +87,16 @@ func (u *User) GetUserByID(ctx context.Context, id uuid.UUID) (*U, error) {
 
 	log.Info().Msg("Got request to get user by id")
 
-	resChan := make(chan U)
-	errChan := make(chan error)
-	var errorCount atomic.Uint64
+	conn := u.getSlaveConnection()
 
-	for _, v := range u.slaves {
-		go func(resChan chan<- U, v *gorm.DB) {
-			res := U{}
-			r := v.Model(U{ID: id}).First(&res)
+	res := U{}
 
-			if r.Error != nil {
-				errorCount.Add(1)
-				errChan <- r.Error
-				log.Err(r.Error).Msg("Unable to fetch user by Id")
-				return
-			}
+	r := conn.Model(U{ID: id}).First(&res)
 
-			resChan <- res
-		}(resChan, v)
+	if r.Error != nil {
+		log.Err(r.Error).Msg("Unable to fetch user by Id")
+		return nil, r.Error
 	}
 
-	select {
-	case user := <-resChan:
-		return &user, nil
-	case e := <-errChan:
-		return nil, e
-	}
+	return &res, nil
 }

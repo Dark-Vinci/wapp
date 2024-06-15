@@ -40,8 +40,8 @@ func NewEnv() *Environment {
 	shouldMigrate, _ := strconv.ParseBool(p)
 
 	return &Environment{
-		AppPort:          constants.FromStr(os.Getenv(constants.AppPort)),
-		AppEnvironment:   os.Getenv(constants.AppPort),
+		AppPort:          os.Getenv(constants.AppPort),
+		AppEnvironment:   constants.FromStr(os.Getenv(constants.AppPort)),
 		ShouldMigrate:    shouldMigrate,
 		KafkaURL:         os.Getenv(constants.KafkaURL),
 		PgSlaveHost:      os.Getenv(constants.PgSlaveHost),
