@@ -19,7 +19,9 @@ require (
 	gorm.io/gorm v1.25.10
 )
 
-require github.com/dark-vinci/linkedout/backend/sdk v0.0.1
+// require github.com/dark-vinci/linkedout/backend/sdk v0.0.1
+
+require github.com/dark-vinci/linkedout/backend/sdk v0.0.0-00010101000000-000000000000
 
 require (
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
