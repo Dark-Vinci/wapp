@@ -12,7 +12,7 @@ COPY sdk /go/src/github.com/dark-vinci/linkedout/sdk
 COPY account /go/src/github.com/dark-vinci/linkedout/account
 
 RUN go mod tidy
-RUN go get ./
+RUN go get ./...
 RUN go build
 RUN go get github.com/pilu/fresh
 
