@@ -7,7 +7,7 @@ import (
 
 const logMethodKey string = "LOG_METHOD"
 
-func (a *App) Ping(ctx context.Context, message string) string {
+func (a *App) Ping(_ context.Context, message string) string {
 	logger := a.logger.With().
 		Str(logMethodKey, "app.Ping").
 		Str("message", message).Logger()

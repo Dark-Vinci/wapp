@@ -10,7 +10,7 @@ import (
 	"github.com/dark-vinci/linkedout/backend/account/store"
 )
 
-// const packageName string = "account.app"
+const packageName string = "account.app"
 
 type Operations interface {
 	Ping(ctx context.Context, message string) string

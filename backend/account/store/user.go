@@ -2,7 +2,7 @@ package store
 
 import (
 	"context"
-
+	"fmt"
 	"github.com/google/uuid"
 	"github.com/rs/zerolog"
 	"gorm.io/gorm"
@@ -26,6 +26,66 @@ type User struct {
 	slaves         []*gorm.DB
 	count          int64
 	slaveInstances int
+}
+
+func query(db *connection.DBConn) (*struct{}, error) {
+	result := make(chan struct{})
+	errorChan := make(chan error, len(db.Slaves))
+
+	c, cancel := context.WithCancel(context.Background())
+
+	for i := range db.Slaves {
+		go func(ctx context.Context, db *connection.DBConn, index int, result chan<- struct{}, errorChan chan<- error) {
+			select {
+			case <-ctx.Done():
+				return
+			default:
+			}
+
+			res := models.UserModel{}
+
+			if r := db.Slaves[index].Model(User{}).First(&res); r.Error != nil {
+				errorChan <- r.Error
+				fmt.Println("ERROR")
+				return
+			}
+
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				result <- struct{}{}
+			}
+		}(c, db, i, result, errorChan)
+	}
+
+	var resultReceived struct{}
+	var errorCount int
+
+	var currentError error
+
+loop:
+	for {
+		select {
+		case resultReceived = <-result:
+			fmt.Println(resultReceived)
+			cancel()
+			break loop
+		case currentError = <-errorChan:
+			errorCount++
+			if errorCount == len(db.Slaves) {
+				break loop
+			}
+		}
+	}
+
+	cancel()
+
+	if errorCount == len(db.Slaves) {
+		return nil, currentError
+	}
+
+	return &resultReceived, nil
 }
 
 func NewUser(db *connection.DBConn) *UserDatabase {

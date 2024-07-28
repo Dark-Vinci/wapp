@@ -1,3 +1,1 @@
-{"level":"info","APP_NAME":"account","time":"2024-06-10T15:32:11+01:00","message":"app network is up listening on port 2020"}
-{"level":"info","APP_NAME":"account","time":"2024-06-10T15:32:11+01:00","message":"serving service over GRPC...."}
-{"level":"info","APP_NAME":"account","PACKAGE_NAME":"account.server","METHOD_NME":"server.Ping","FUNCTION_INPUT":"aliquip ut irure","time":"2024-06-10T15:32:38+01:00","message":"got ping account service request"}
+{"level":"info","KEY":"app.connection","time":"2024-07-21T21:13:10+01:00","message":"connected to redis db"}
