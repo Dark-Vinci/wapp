@@ -5,9 +5,9 @@ import (
 
 	"github.com/rs/zerolog"
 
-	"github.com/dark-vinci/linkedout/backend/account/connection"
-	"github.com/dark-vinci/linkedout/backend/account/env"
-	"github.com/dark-vinci/linkedout/backend/account/store"
+	"github.com/dark-vinci/wapp/backend/account/connection"
+	"github.com/dark-vinci/wapp/backend/account/env"
+	"github.com/dark-vinci/wapp/backend/account/store"
 )
 
 const packageName string = "account.app"

@@ -3,9 +3,9 @@ package server
 import (
 	"github.com/rs/zerolog"
 
-	"github.com/dark-vinci/linkedout/backend/account/app"
-	"github.com/dark-vinci/linkedout/backend/account/env"
-	"github.com/dark-vinci/linkedout/backend/sdk/grpc/account"
+	"github.com/dark-vinci/wapp/backend/account/app"
+	"github.com/dark-vinci/wapp/backend/account/env"
+	"github.com/dark-vinci/wapp/backend/sdk/grpc/account"
 )
 
 const packageName = "account.server"

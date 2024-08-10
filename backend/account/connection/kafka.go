@@ -4,7 +4,7 @@ import (
 	"github.com/rs/zerolog"
 	kafka "github.com/segmentio/kafka-go"
 
-	"github.com/dark-vinci/linkedout/backend/account/env"
+	"github.com/dark-vinci/wapp/backend/account/env"
 )
 
 type Kafka struct {

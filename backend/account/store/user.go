@@ -2,14 +2,15 @@ package store
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"github.com/google/uuid"
 	"github.com/rs/zerolog"
 	"gorm.io/gorm"
 
-	"github.com/dark-vinci/linkedout/backend/account/connection"
-	"github.com/dark-vinci/linkedout/backend/sdk/constants"
-	"github.com/dark-vinci/linkedout/backend/sdk/models"
+	"github.com/dark-vinci/wapp/backend/account/connection"
+	"github.com/dark-vinci/wapp/backend/sdk/constants"
+	"github.com/dark-vinci/wapp/backend/sdk/models"
 )
 
 type UserReader interface{}
@@ -28,38 +29,76 @@ type User struct {
 	slaveInstances int
 }
 
-func query(db *connection.DBConn) (*struct{}, error) {
-	result := make(chan struct{})
-	errorChan := make(chan error, len(db.Slaves))
+type UserH[T, M any] struct {
+	master *gorm.DB
+	slaves []*gorm.DB
+}
 
-	c, cancel := context.WithCancel(context.Background())
+func NewUserH[T, M any]() *UserH[T, M] {
+	return &UserH[T, M]{}
+}
 
-	for i := range db.Slaves {
-		go func(ctx context.Context, db *connection.DBConn, index int, result chan<- struct{}, errorChan chan<- error) {
-			select {
-			case <-ctx.Done():
-				return
-			default:
-			}
+const FIRST = "FIRST"
 
-			res := models.UserModel{}
+func (u *UserH[T, M]) Modifier(c context.Context, model T, ty string) (*T, error) {
+	switch ty {
+	case "CREATE":
+		db := u.master.WithContext(c).Create(&model)
 
-			if r := db.Slaves[index].Model(User{}).First(&res); r.Error != nil {
-				errorChan <- r.Error
-				fmt.Println("ERROR")
-				return
-			}
+		if db.Error != nil {
+			return nil, db.Error
+		}
 
-			select {
-			case <-ctx.Done():
-				return
-			default:
-				result <- struct{}{}
-			}
-		}(c, db, i, result, errorChan)
+	case "UPDATE":
+		db := u.master.WithContext(c).Updates(&model)
+
+		if db.Error != nil {
+			return nil, db.Error
+		}
 	}
 
-	var resultReceived struct{}
+	return &model, nil
+}
+
+func (u *UserH[T, M]) Queries(cont context.Context, queryType string) (*T, error) {
+	if len(u.slaves) == 0 {
+		return nil, errors.New("")
+	}
+	result := make(chan T)
+	errorChan := make(chan error, len(u.slaves))
+
+	c, cancel := context.WithCancel(cont)
+
+	for i, slave := range u.slaves {
+		go func(ctx context.Context, index int, result chan<- T, errorChan chan<- error) {
+			select {
+			case <-ctx.Done():
+				return
+			default:
+			}
+
+			var res T
+			var model M
+
+			switch queryType {
+			case FIRST:
+				if r := slave.Model(model).First(&res); r.Error != nil {
+					errorChan <- r.Error
+					fmt.Println("ERROR")
+					return
+				}
+			}
+
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				result <- res
+			}
+		}(c, i, result, errorChan)
+	}
+
+	var resultReceived T
 	var errorCount int
 
 	var currentError error
@@ -73,7 +112,7 @@ loop:
 			break loop
 		case currentError = <-errorChan:
 			errorCount++
-			if errorCount == len(db.Slaves) {
+			if errorCount == len(u.slaves) {
 				break loop
 			}
 		}
@@ -81,7 +120,7 @@ loop:
 
 	cancel()
 
-	if errorCount == len(db.Slaves) {
+	if errorCount == len(u.slaves) {
 		return nil, currentError
 	}
 
@@ -139,16 +178,14 @@ func (u *User) GetUserByID(ctx context.Context, id uuid.UUID) (*models.UserModel
 
 	log.Info().Msg("Got request to get user by id")
 
-	conn := u.getSlaveConnection()
+	q := NewUserH[models.UserModel, models.UserModel]()
 
-	res := models.UserModel{}
+	res, err := q.Queries(ctx, FIRST)
 
-	r := conn.Model(models.UserModel{ID: id}).First(&res)
-
-	if r.Error != nil {
-		log.Err(r.Error).Msg("Unable to fetch user by Id")
-		return nil, r.Error
+	if err != nil {
+		log.Error().Err(err).Msg("failed to get user by id")
+		return nil, err
 	}
 
-	return &res, nil
+	return res, nil
 }

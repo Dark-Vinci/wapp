@@ -3,8 +3,8 @@ package server
 import (
 	"context"
 
-	"github.com/dark-vinci/linkedout/backend/sdk/constants"
-	"github.com/dark-vinci/linkedout/backend/sdk/grpc/account"
+	"github.com/dark-vinci/wapp/backend/sdk/constants"
+	"github.com/dark-vinci/wapp/backend/sdk/grpc/account"
 )
 
 // Ping for service health checks

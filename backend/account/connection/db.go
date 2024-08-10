@@ -9,7 +9,7 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 
-	"github.com/dark-vinci/linkedout/backend/account/env"
+	"github.com/dark-vinci/wapp/backend/account/env"
 )
 
 const packageName string = "app.connection"

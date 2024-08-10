@@ -4,7 +4,7 @@ import (
 	"github.com/go-redis/redis/v8"
 	"github.com/rs/zerolog"
 
-	"github.com/dark-vinci/linkedout/backend/account/env"
+	"github.com/dark-vinci/wapp/backend/account/env"
 )
 
 type RedisClient struct {

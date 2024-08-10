@@ -1,7 +1,7 @@
 syntax = "proto3";
-package linkedout.account;
+package wapp.account;
 
-option go_package = "github.com/dark-vinci/linkedout/backend/sdk/grpc/account";
+option go_package = "github.com/dark-vinci/wapp/backend/sdk/grpc/account";
 
 import "google/protobuf/empty.proto";
 

@@ -1,12 +1,12 @@
-module github.com/dark-vinci/linkedout/backend/account
+module github.com/dark-vinci/wapp/backend/account
 
-replace github.com/dark-vinci/linkedout/backend/sdk => ../sdk
+replace github.com/dark-vinci/wapp/backend/sdk => ../sdk
 
 go 1.22.1
 
 require (
 	github.com/dark-vinci/isok v0.0.1
-	github.com/dark-vinci/linkedout/backend/sdk v0.0.0-00010101000000-000000000000
+	github.com/dark-vinci/wapp/backend/sdk v0.0.0-00010101000000-000000000000
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/google/uuid v1.6.0
 	github.com/pressly/goose/v3 v3.20.0
