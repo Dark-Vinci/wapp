@@ -30,11 +30,12 @@ func main() {
 	appLogger.Debug().Msg("something should happen")
 	appLogger.Debug().Msg("another log in the logger file")
 
-	h := handlers.Router(e, logger)
+	h := handlers.New(e, logger)
+	h.Build()
 
 	server := &http.Server{
 		Addr:    ":8080",
-		Handler: h,
+		Handler: h.GetEngine(),
 	}
 
 	go func() {

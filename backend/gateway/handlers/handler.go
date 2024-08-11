@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	//"github.com/dark-vinci/wapp/backend/gateway/handlers/socket"
+	//"github.com/dark-vinci/wapp/backend/gateway/handlers/socket"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -9,20 +11,64 @@ import (
 
 	"github.com/dark-vinci/wapp/backend/gateway/app"
 	"github.com/dark-vinci/wapp/backend/gateway/env"
-	"github.com/dark-vinci/wapp/backend/sdk/constants"
+	appSocket "github.com/dark-vinci/wapp/backend/gateway/handlers/socket"
 )
 
 const packageName = "gateway.handlers"
 
-const chatNamespace = "CHAT"
-const defaultNamespace = ""
-const groupNamespace = "GROUP"
-const fansNamespace = "FANS"
-
 type Handler struct {
-	log *zerolog.Logger
-	env *env.Environment
-	app app.Operations
+	log          *zerolog.Logger
+	env          *env.Environment
+	app          *app.Operations
+	socketServer *socket.Server
+	middleware   *string
+	engine       *gin.Engine
+}
+
+func New(e *env.Environment, logger zerolog.Logger) *Handler {
+	a := app.New()
+	s := appSocket.Server(e, logger)
+
+	r := gin.Default()
+
+	return &Handler{
+		env:          e,
+		log:          &logger,
+		app:          &a,
+		socketServer: s,
+		engine:       r,
+	}
+}
+
+func (h *Handler) GetEngine() *gin.Engine {
+	return h.engine
+}
+
+func (h *Handler) Build() {
+	gin.ForceConsoleColor()
+
+	h.engine.Use(ginMiddleware(h.env.FrontEndURL))
+
+	apiGroup := h.engine.Group("/api")
+
+	apiGroup.GET("/ping", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, gin.H{
+			"name":     "tomato",
+			"response": "200",
+		})
+	})
+
+	//socket IO
+	h.engine.GET("/socket.io/*any", abc, gin.WrapH(h.socketServer))
+	h.engine.POST("/socket.io/*any", abc, gin.WrapH(h.socketServer))
+	h.engine.StaticFS("/public", http.Dir("../asset"))
+}
+
+func abc(ctx *gin.Context) {
+	ctx.JSON(http.StatusOK, gin.H{
+		"name":     "tomato",
+		"response": "200",
+	})
 }
 
 func ginMiddleware(allowOrigin string) gin.HandlerFunc {
@@ -41,60 +87,4 @@ func ginMiddleware(allowOrigin string) gin.HandlerFunc {
 
 		c.Next()
 	}
-}
-
-func Router(e *env.Environment, logger zerolog.Logger) *gin.Engine {
-	log := logger.With().
-		Str(constants.PackageStrHelper, packageName).
-		Str(constants.FunctionNameHelper, "Router").
-		Logger()
-
-	r := gin.Default()
-
-	a := app.New()
-
-	h := Handler{
-		log: &log,
-		env: e,
-		app: a,
-	}
-
-	server := socket.NewServer(nil)
-
-	if _, err := server.Adapter(&socket.RedisAdapterOptions{}); err != nil {
-		panic(err)
-	}
-
-	server.OnConnect(defaultNamespace, h.connect)
-	server.OnDisconnect(defaultNamespace, h.disconnect)
-	server.OnError(defaultNamespace, h.error)
-
-	server.OnEvent(chatNamespace, "msg", h.chat)
-	server.OnEvent(groupNamespace, "msg", h.chat)
-	server.OnEvent(fansNamespace, "msg", h.chat)
-
-	server.OnEvent(defaultNamespace, "notice", h.chat)
-	server.OnEvent(defaultNamespace, "bye", h.chat)
-
-	gin.ForceConsoleColor()
-
-	r.Use(ginMiddleware(e.FrontEndURL))
-
-	r.GET("/ping", func(ctx *gin.Context) {
-		ctx.JSON(http.StatusOK, gin.H{
-			"name":     "tomato",
-			"response": "200",
-		})
-	})
-
-	// auth, handler
-	// secretes
-	// images
-	//
-
-	r.GET("/socket.io/*any", gin.WrapH(server))
-	r.POST("/socket.io/*any", gin.WrapH(server))
-	r.StaticFS("/public", http.Dir("../asset"))
-
-	return r
 }
