@@ -5,6 +5,7 @@ import (
 	"github.com/rs/zerolog"
 
 	"github.com/dark-vinci/wapp/backend/account/env"
+	"github.com/dark-vinci/wapp/backend/sdk/constants"
 )
 
 type RedisClient struct {
@@ -15,11 +16,11 @@ type RedisInterface interface {
 }
 
 func (r *RedisClient) Close() {
-	r.Val.Close()
+	_ = r.Val.Close()
 }
 
 func NewRedisClient(z *zerolog.Logger, e *env.Environment) *RedisClient {
-	log := z.With().Str("KEY", packageName).Logger()
+	log := z.With().Str(constants.PackageStrHelper, packageName).Logger()
 
 	r := redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379", // Redis server address

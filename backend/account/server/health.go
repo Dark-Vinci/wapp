@@ -12,7 +12,10 @@ func (s *Server) Ping(ctx context.Context, in *account.PingRequest) (*account.Pi
 	s.logger.Info().
 		Str(constants.MethodStrHelper, "server.Ping").
 		Str(constants.FunctionInputHelper, in.Data).
+		Str(constants.PackageStrHelper, packageName).
 		Msg("got ping account service request")
+
+	ctx = context.WithValue(ctx, constants.RequestID, "REQUEST_ID")
 
 	return &account.PingResponse{
 		Data: s.app.Ping(ctx, in.GetData()),

@@ -13,9 +13,8 @@ import (
 	"github.com/pressly/goose/v3"
 	"github.com/rs/zerolog"
 
-	"github.com/dark-vinci/linkedout/backend/sdk/constants"
-	"github.com/dark-vinci/linkedout/backend/sdk/isok"
-	"github.com/dark-vinci/linkedout/backend/sdk/sdkerror"
+	"github.com/dark-vinci/wapp/backend/sdk/constants"
+	"github.com/dark-vinci/wapp/backend/sdk/sdkerror"
 )
 
 type MigrationConfig struct {
@@ -45,16 +44,16 @@ func Migration(ctx context.Context, logger *zerolog.Logger, e MigrationConfig, s
 		e.PgExternalPort,
 		service)
 
-	dbR := isok.ResultFun1(sql.Open("postgres", connection))
+	db, err := sql.Open("postgres", connection)
 
-	if dbR.IsErr() {
-		logger.Fatal().Err(dbR.UnwrapErr()).Msgf(fmt.Sprintf("goose %v: %v", command, dbR.UnwrapErr()))
+	if err != nil {
+		logger.Fatal().Err(err).Msgf(fmt.Sprintf("goose %v: %v", command, err))
 		return sdkerror.ErrUnableToConnectToDB
 	}
 
 	defer func() {
-		if res := isok.ResultFun0(dbR.Unwrap().Close()); res.IsErr() {
-			log.Fatalf("goose: failed to close DB: %v\n", res.UnwrapErr())
+		if err = db.Close(); err != nil {
+			log.Fatalf("goose: failed to close DB: %v\n", err)
 		}
 	}()
 
@@ -69,18 +68,19 @@ func Migration(ctx context.Context, logger *zerolog.Logger, e MigrationConfig, s
 
 	migrationDirectory := fmt.Sprintf("%s/migrations", currentDir)
 
-	gRes := isok.ResultFun0(goose.RunContext(ctx, command, dbR.Unwrap(), migrationDirectory, arguments...))
-	if gRes.IsErr() {
-		logger.Fatal().Err(gRes.UnwrapErr()).Msgf(fmt.Sprintf("goose %v: %v", command, gRes.UnwrapErr()))
+	err = goose.RunContext(ctx, command, db, migrationDirectory, arguments...)
+	if err != nil {
+		logger.Fatal().Err(err).Msgf(fmt.Sprintf("goose %v: %v", command, err))
 	}
 
 	// we want to grant required permissions and privileges after every up - run
 	if command == constants.UP {
-		resRes := isok.ResultFun0(runUpMigrationHook(dbR.Unwrap(), os.Getenv(e.PgUser)))
-		if resRes.IsErr() {
-			logger.Err(resRes.UnwrapErr()).Msg("runUpMigrationHook failed")
+		err = runUpMigrationHook(db, os.Getenv(e.PgUser))
+		if err != nil {
+			logger.Err(err).Msg("runUpMigrationHook failed")
 			return nil
 		}
+
 		logger.Info().Msg("runUpMigrationHook ran successfully")
 	}
 
@@ -100,14 +100,14 @@ func runUpMigrationHook(db *sql.DB, dbUser string) error {
 	buf := bytes.NewBuffer(nil)
 	r := strings.NewReader(script)
 
-	cRes := isok.ResultFun1(io.Copy(buf, r))
-	if cRes.IsErr() {
-		return fmt.Errorf("failed to read SQL script: %v", cRes.UnwrapErr())
+	_, err := io.Copy(buf, r)
+	if err != nil {
+		return fmt.Errorf("failed to read SQL script: %v", err)
 	}
 
-	eRes := isok.ResultFun1(db.Exec(buf.String()))
-	if eRes.IsErr() {
-		return fmt.Errorf("failed to execute SQL script: %v", eRes.UnwrapErr())
+	_, err = db.Exec(buf.String())
+	if err != nil {
+		return fmt.Errorf("failed to execute SQL script: %v", err)
 	}
 
 	return nil

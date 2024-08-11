@@ -2,117 +2,70 @@ package connection
 
 import (
 	"fmt"
-	"sync"
 
-	"github.com/dark-vinci/isok"
 	"github.com/rs/zerolog"
+	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/plugin/dbresolver"
 
 	"github.com/dark-vinci/wapp/backend/account/env"
+	"github.com/dark-vinci/wapp/backend/sdk/constants"
 )
 
-const packageName string = "app.connection"
-
-const SLAVE_COUNT = 4
+//const packageName string = "app.connection"
 
 type DBConn struct {
-	Master *gorm.DB
-	Slaves []*gorm.DB
-	Log    *zerolog.Logger
+	Connection *gorm.DB
+	Log        *zerolog.Logger
+}
+
+//func GetStore(t *testing.T) (sqlmock.Sqlmock, *DBConn) {
+//}
+
+func NewDBConn(z zerolog.Logger, e *env.Environment) *DBConn {
+	log := z.With().Str(constants.PackageStrHelper, packageName).Logger()
+
+	db, err := gorm.Open(
+		postgres.Open(
+			fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=disable TimeZone=Africa/Lagos",
+				e.PgMasterHost,
+				e.PgMasterPort,
+				e.PgMasterUser,
+				e.PgMasterName,
+				e.PgMasterPassword,
+			),
+		),
+		&gorm.Config{},
+	)
+
+	if err != nil {
+		log.Fatal().Err(err).Msg("failed to connect to master databases")
+		panic(err)
+	}
+
+	err = db.Use(dbresolver.Register(
+		dbresolver.Config{
+			Replicas: []gorm.Dialector{mysql.Open("db3_dsn"), mysql.Open("db4_dsn")},
+			Policy:   dbresolver.RandomPolicy{},
+		}))
+
+	if err != nil {
+		log.Fatal().Err(err).Msg("failed to connect to slave databases")
+		panic(err)
+	}
+
+	return &DBConn{
+		Connection: db,
+		Log:        &z,
+	}
 }
 
 func (db *DBConn) Close() {
-	m, _ := db.Master.DB()
-	m.Close()
+	m, _ := db.Connection.DB()
+	err := m.Close()
 
-	for _, v := range db.Slaves {
-		m, _ := v.DB()
-		m.Close()
-	}
-}
-
-func NewDBConn(z zerolog.Logger, e *env.Environment) *DBConn {
-	log := z.With().Str("KEY", packageName).Logger()
-
-	c := make(chan *gorm.DB, 3)
-	m := make(chan *gorm.DB)
-	var wg sync.WaitGroup
-
-	wg.Add(1)
-
-	go func(wg *sync.WaitGroup, m chan<- *gorm.DB) {
-		defer wg.Done()
-
-		mRes := isok.ResultFun1(
-			gorm.Open(
-				postgres.Open(
-					fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=disable TimeZone=Africa/Lagos",
-						e.PgMasterHost,
-						e.PgMasterPort,
-						e.PgMasterUser,
-						e.PgMasterName,
-						e.PgMasterPassword,
-					),
-				),
-				&gorm.Config{},
-			),
-		)
-
-		if mRes.IsErr() {
-			log.Fatal().Err(mRes.UnwrapErr())
-			panic(mRes.UnwrapErr())
-		}
-
-		m <- mRes.Unwrap()
-	}(&wg, m)
-
-	for range SLAVE_COUNT {
-		wg.Add(1)
-
-		go func(wg *sync.WaitGroup, e *env.Environment, c chan<- *gorm.DB, log zerolog.Logger) {
-			defer wg.Wait()
-
-			mRes := isok.ResultFun1(
-				gorm.Open(
-					postgres.Open(
-						fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=disable TimeZone=Africa/Lagos",
-							e.PgMasterHost,
-							e.PgMasterPort,
-							e.PgMasterUser,
-							e.PgMasterName,
-							e.PgMasterPassword,
-						),
-					),
-					&gorm.Config{},
-				),
-			)
-
-			if mRes.IsErr() {
-				log.Fatal().Err(mRes.UnwrapErr())
-				panic(mRes.UnwrapErr())
-			}
-
-			c <- mRes.Unwrap()
-		}(&wg, e, c, log)
-	}
-
-	go func() {
-		wg.Wait()
-		close(c)
-	}()
-
-	slaves := make([]*gorm.DB, 0)
-
-	for r := range c {
-		slaves = append(slaves, r)
-	}
-
-	ma := <-m
-
-	return &DBConn{
-		Slaves: slaves,
-		Master: ma,
-		Log:    &z,
+	if err != nil {
+		return
 	}
 }

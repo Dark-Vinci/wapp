@@ -16,27 +16,32 @@ import (
 	"github.com/dark-vinci/wapp/backend/sdk/constants"
 	"github.com/dark-vinci/wapp/backend/sdk/grpc/account"
 	"github.com/dark-vinci/wapp/backend/sdk/utils"
+	"github.com/dark-vinci/wapp/backend/sdk/utils/clickhouse"
 )
 
-const AppName = "account"
+const AppName = "account.main"
+const AppNameKey = "APP_NAME"
 
 func main() {
 	_ = os.Setenv("TZ", constants.TimeZone)
 
-	f, err := os.Create("./zero.log")
-
-	if err != nil {
-		panic("unable to create logger file")
-	}
-
-	logger := zerolog.New(f).With().Timestamp().Logger()
-	appLogger := logger.With().Str("APP_NAME", AppName).Logger()
-
 	e := env.NewEnv()
+
+	//connect to clickhouse for logs and analytics
+	click := clickhouse.New(e.ClickHouseDatabase, e.ClickHouseUsername, e.ClickHousePassword)
+
+	defer click.Close()
+
+	logger := zerolog.New(click).With().Timestamp().Logger()
+	appLogger := logger.With().Str(AppNameKey, AppName).Logger()
 
 	if e.ShouldMigrate {
 		err := utils.Migration(context.Background(), &logger, *e.MigrationConfig(), AppName)
-		panic(err)
+
+		if err != nil {
+			appLogger.Fatal().Err(err).Msg("migration failed")
+			panic(err)
+		}
 	}
 
 	a := app.New(&logger, e)
@@ -45,14 +50,12 @@ func main() {
 	grpcServer := grpc.NewServer()
 	account.RegisterAccountServer(grpcServer, server.New(e, appLogger, a))
 
-	res, err := net.Listen("tcp", fmt.Sprintf(":%s", e.AppPort))
+	listener, err := net.Listen("tcp", fmt.Sprintf(":%s", e.AppPort))
 
 	if err != nil {
 		appLogger.Fatal().Err(err).Msg("net.Listen failed")
 		panic(err)
 	}
-
-	listener := res
 
 	appLogger.Info().Msgf("app network is up listening on port %s", e.AppPort)
 
@@ -73,7 +76,7 @@ func main() {
 	serverErrors := make(chan error, 1)
 
 	select {
-	case err := <-serverErrors:
+	case err = <-serverErrors:
 		appLogger.Panic().Err(err).Msg("server error")
 	case sig := <-shutdown:
 		appLogger.Info().Msgf("%v : start server shutdown.", sig)

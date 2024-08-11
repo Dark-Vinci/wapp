@@ -8,10 +8,10 @@ const (
 	Production
 )
 
-var env = map[AppEnvironment]string {
-	Testing: "tesing",
+var env = map[AppEnvironment]string{
+	Testing:     "testing",
 	Development: "development",
-	Production: "production",
+	Production:  "production",
 }
 
 func (a AppEnvironment) String() string {
@@ -24,6 +24,6 @@ func FromStr(val string) AppEnvironment {
 			return k
 		}
 	}
-	
+
 	return 0
 }

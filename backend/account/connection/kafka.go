@@ -1,8 +1,9 @@
 package connection
 
 import (
+	"github.com/dark-vinci/wapp/backend/sdk/constants"
 	"github.com/rs/zerolog"
-	kafka "github.com/segmentio/kafka-go"
+	"github.com/segmentio/kafka-go"
 
 	"github.com/dark-vinci/wapp/backend/account/env"
 )
@@ -15,12 +16,12 @@ type Kafka struct {
 type KafkaInterface interface{}
 
 func (k *Kafka) Close() {
-	k.Reader.Close()
-	k.Writer.Close()
+	_ = k.Reader.Close()
+	_ = k.Writer.Close()
 }
 
 func NewKafka(z zerolog.Logger, e *env.Environment) *Kafka {
-	log := z.With().Str("KEY", "value").Logger()
+	log := z.With().Str(constants.PackageStrHelper, packageName).Logger()
 
 	w := kafka.Writer{
 		Addr:     kafka.TCP(e.KafkaURL),

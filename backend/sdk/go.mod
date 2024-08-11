@@ -1,16 +1,13 @@
-module github.com/dark-vinci/linkedout/backend/sdk
+module github.com/dark-vinci/wapp/backend/sdk
 
 go 1.22.1
 
 require (
-	github.com/dark-vinci/isok v0.0.1
-	github.com/dark-vinci/linkedout/backend/account v0.0.0-20240610150251-609010beea1a
 	github.com/google/uuid v1.6.0
 	github.com/pressly/goose/v3 v3.19.2
 	github.com/rs/zerolog v1.32.0
 	google.golang.org/grpc v1.62.1
 	google.golang.org/protobuf v1.33.0
-//github.com/pressly/goose
 )
 
 require (

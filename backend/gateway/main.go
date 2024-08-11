@@ -1,46 +1,61 @@
 package main
 
 import (
+	"context"
+	"errors"
 	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
-	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog"
+
+	"github.com/dark-vinci/wapp/backend/gateway/env"
+	"github.com/dark-vinci/wapp/backend/gateway/handlers"
+	"github.com/dark-vinci/wapp/backend/sdk/constants"
+	"github.com/dark-vinci/wapp/backend/sdk/utils/clickhouse"
 )
 
-func setupRouter() *gin.Engine {
-	r := gin.Default()
-
-	gin.ForceConsoleColor()
-
-	r.GET("/ping", func(ctx *gin.Context) {
-		ctx.JSON(http.StatusOK, gin.H{
-			"name":     "tomato",
-			"response": "200",
-		})
-	})
-
-	return r
-}
-
 func main() {
-	_ = os.Setenv("TZ", "Africa/Lagos")
+	_ = os.Setenv("TZ", constants.TimeZone)
 
-	zlFile, err := os.Create("./zero.log")
-	if err != nil {
-		panic("cant create file")
-	}
+	e := env.New()
 
-	logger := zerolog.New(zlFile).With().Timestamp().Logger()
+	click := clickhouse.New("", "", "")
+
+	logger := zerolog.New(click).With().Timestamp().Logger()
 	appLogger := logger.With().Str("GATEWAY", "api").Logger()
 
 	appLogger.Debug().Msg("something should happen")
 	appLogger.Debug().Msg("another log in the logger file")
 
-	r := setupRouter()
-	if err := r.Run(":8080"); err != nil {
-		appLogger.Err(err).Msg("something went wrong")
+	h := handlers.Router(e, logger)
+
+	server := &http.Server{
+		Addr:    ":8080",
+		Handler: h,
 	}
 
-	appLogger.Debug().Msg("app exiting")
+	go func() {
+		if err := server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			appLogger.Fatal().Err(err).Msg("failed to start server")
+		}
+	}()
+
+	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+
+	<-ctx.Done()
+
+	stop()
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+
+	defer cancel()
+
+	if err := server.Shutdown(ctx); err != nil {
+		appLogger.Err(err).Msg("Server forced to shutdown")
+	}
+
+	appLogger.Debug().Msg("server last message")
 }

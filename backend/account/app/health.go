@@ -3,14 +3,16 @@ package app
 import (
 	"context"
 	"fmt"
+
+	"github.com/dark-vinci/wapp/backend/sdk/constants"
+	"github.com/dark-vinci/wapp/backend/sdk/utils"
 )
 
-const logMethodKey string = "LOG_METHOD"
-
-func (a *App) Ping(_ context.Context, message string) string {
+func (a *App) Ping(ctx context.Context, message string) string {
 	logger := a.logger.With().
-		Str(logMethodKey, "app.Ping").
-		Str("message", message).Logger()
+		Str(constants.PackageStrHelper, packageName).
+		Str(constants.MethodStrHelper, "app.Ping").
+		Str(constants.RequestID, utils.GetRequestID(ctx)).Logger()
 
 	logger.Info().Msg("Got a ping request")
 
