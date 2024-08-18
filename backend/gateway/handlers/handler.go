@@ -1,8 +1,6 @@
 package handlers
 
 import (
-	//"github.com/dark-vinci/wapp/backend/gateway/handlers/socket"
-	//"github.com/dark-vinci/wapp/backend/gateway/handlers/socket"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -59,12 +57,12 @@ func (h *Handler) Build() {
 	})
 
 	//socket IO
-	h.engine.GET("/socket.io/*any", abc, gin.WrapH(h.socketServer))
-	h.engine.POST("/socket.io/*any", abc, gin.WrapH(h.socketServer))
+	h.engine.GET("/socket.io/*any", authentication, gin.WrapH(h.socketServer))
+	h.engine.POST("/socket.io/*any", authentication, gin.WrapH(h.socketServer))
 	h.engine.StaticFS("/public", http.Dir("../asset"))
 }
 
-func abc(ctx *gin.Context) {
+func authentication(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"name":     "tomato",
 		"response": "200",

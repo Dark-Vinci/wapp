@@ -10,6 +10,7 @@ import (
 	"github.com/dark-vinci/wapp/backend/account/connection"
 	"github.com/dark-vinci/wapp/backend/sdk/constants"
 	"github.com/dark-vinci/wapp/backend/sdk/models"
+	"github.com/dark-vinci/wapp/backend/sdk/utils"
 )
 
 type UserDatabase interface {
@@ -34,6 +35,7 @@ func NewUser(db *connection.DBConn) *UserDatabase {
 func (u *User) CreateUser(ctx context.Context, user models.UserModel) (*models.UserModel, error) {
 	log := u.log.With().
 		Str(constants.MethodStrHelper, "store.CreateUser").
+		Str(constants.RequestID, utils.GetRequestID(ctx)).
 		Str(constants.PackageStrHelper, packageName).
 		Logger()
 
@@ -52,6 +54,7 @@ func (u *User) CreateUser(ctx context.Context, user models.UserModel) (*models.U
 func (u *User) GetUserByID(ctx context.Context, id uuid.UUID) (*models.UserModel, error) {
 	log := u.log.With().
 		Str(constants.PackageStrHelper, packageName).
+		Str(constants.RequestID, utils.GetRequestID(ctx)).
 		Str(constants.MethodStrHelper, "store.GetUserByID").
 		Logger()
 

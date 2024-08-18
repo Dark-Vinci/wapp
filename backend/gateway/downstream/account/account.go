@@ -1,3 +1,3 @@
 package account
 
-const packageName = "gateway.account"
+const packageName = "gateway.downstream.account"

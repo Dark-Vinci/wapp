@@ -7,6 +7,15 @@ import (
 func (a *AppSocket) connect(s socket.Conn) error {
 	s.SetContext("")
 
+	s.Emit("connect", s)
+
+	//a.server.
+
+	socketID := s.ID()
+
+	a.connectionID = append(a.connectionID, socketID)
+
+	//a.server.
 	a.log.Debug().Msgf("connected: %s", s.ID())
 
 	return nil
