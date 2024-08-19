@@ -6,16 +6,31 @@ import (
 	"github.com/google/uuid"
 )
 
-type UserModel struct {
-	ID          uuid.UUID `gorm:"primary key"`
-	FirstName   string
-	LastName    string
-	MiddleName  *string
-	DateOfBirth time.Time
+type User struct {
+	ID         uuid.UUID `gorm:"primary key"`
+	FirstName  string
+	LastName   string
+	MiddleName *string
+
 	Email       string
+	PhoneNumber string
 	Password    *string
-	GoogleToken *string
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
-	DeletedAt   *time.Time
+
+	About string
+
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt *time.Time
+}
+
+type Group struct {
+	ID   uuid.UUID `gorm:"primary key"`
+	Name string
+
+	CreatedBy uuid.UUID
+	Pofile    *string
+
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt *time.Time
 }

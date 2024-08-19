@@ -10,7 +10,6 @@ import (
 
 func (a *App) Ping(ctx context.Context, message string) string {
 	logger := a.logger.With().
-		Str(constants.PackageStrHelper, packageName).
 		Str(constants.MethodStrHelper, "app.Ping").
 		Str(constants.RequestID, utils.GetRequestID(ctx)).Logger()
 

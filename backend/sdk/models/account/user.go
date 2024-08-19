@@ -6,26 +6,93 @@ import (
 	"github.com/google/uuid"
 )
 
-type UserModel struct {
+type User struct {
 	ID          uuid.UUID `gorm:"primary key"`
 	FirstName   string
 	LastName    string
 	MiddleName  *string
-	DateOfBirth time.Time
 	Email       string
+	PhoneNumber string
 	Password    *string
-	GoogleToken *string
+	About       string
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 	DeletedAt   *time.Time
 }
 
-// type U struct {
-// 	ID          uuid.UUID
-// 	FirstName   string
-// 	LastName    string
-// 	DateOfBirth time.Time
-// 	CreatedAt   time.Time
-// 	UpdatedAt   time.Time
-// 	DeletedAT   *time.Time
-// }
+//func (u *User) BeforeCreate(tx *gorm.DB) string {
+//	// hash the user password
+//}
+
+type CreateUser struct {
+	FirstName   string
+	LastName    string
+	MiddleName  *string
+	Email       string
+	PhoneNumber string
+	Password    *string
+	About       string
+}
+
+type ProfileURL struct {
+	ID        uuid.UUID
+	EntityID  uuid.UUID
+	URL       string
+	FOR       string // channel, user, group
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt *time.Time
+}
+
+type Group struct {
+	ID        uuid.UUID `gorm:"primary key"`
+	Name      string
+	CreatedBy uuid.UUID
+	//ProfileURL *string
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt *time.Time
+}
+
+type Channel struct {
+	ID        uuid.UUID `gorm:"primary key"`
+	UserID    uuid.UUID `gorm:"index"`
+	Name      string
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt *time.Time
+}
+
+type UserChannel struct {
+	ID        uuid.UUID `gorm:"primary key"`
+	ChannelID uuid.UUID `gorm:"index"`
+	UserID    uuid.UUID `gorm:"index"`
+	Mute      bool
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt *time.Time
+}
+
+type UserGroup struct {
+	ID        uuid.UUID `gorm:"primary key"`
+	GroupID   uuid.UUID `gorm:"index"`
+	UserID    uuid.UUID `gorm:"index"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	Mute      bool
+	Deleted   bool
+}
+
+type Contacts struct {
+	ID            string
+	Owner         string
+	ContactID     string
+	ContactNumber string
+	IsVerified    bool
+	IsBlocked     bool
+	IsArchived    bool
+	IsFavorite    bool
+	createdAt     time.Time
+	UpdatedAt     time.Time
+	DeletedAt     time.Time
+}
