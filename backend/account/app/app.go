@@ -32,6 +32,8 @@ type Operations interface {
 	MakeContactFavourite(ctx context.Context, contactID, userID uuid.UUID) error
 	DeleteContact(ctx context.Context, contactID, userID uuid.UUID) error
 	Ping(ctx context.Context, message string) string
+	CreateChannel(ctx context.Context, channel account.Channel) (*account.Channel, error)
+	DeleteChannel(ctx context.Context, channelID uuid.UUID) error
 }
 
 type App struct {
