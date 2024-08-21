@@ -11,6 +11,7 @@ require (
 	github.com/pressly/goose/v3 v3.21.1
 	github.com/rs/zerolog v1.33.0
 	github.com/segmentio/kafka-go v0.4.47
+	go.uber.org/mock v0.4.0
 	google.golang.org/grpc v1.65.0
 	gorm.io/driver/mysql v1.5.6
 	gorm.io/driver/postgres v1.5.9

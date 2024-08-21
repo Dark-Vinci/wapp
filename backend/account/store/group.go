@@ -22,6 +22,7 @@ type Group struct {
 	db     *gorm.DB
 }
 
+//go:generate mockgen -source group.go -destination ./mock/group_mock.go -package mock GroupDatabase
 type GroupDatabase interface {
 	Create(ctx context.Context, group account.Group) (*account.Group, error)
 	GetGroupByID(ctx context.Context, id uuid.UUID) (*models.Group, error)

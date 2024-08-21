@@ -21,6 +21,7 @@ type Channel struct {
 	db     *gorm.DB
 }
 
+//go:generate mockgen -source channel.go -destination ./mock/channel_mock.go -package mock ChannelDatabase
 type ChannelDatabase interface {
 	Create(ctx context.Context, channel account.Channel) (*account.Channel, error)
 	DeleteByID(ctx context.Context, channelID uuid.UUID, deletedAt time.Time) error

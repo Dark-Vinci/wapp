@@ -16,6 +16,7 @@ import (
 	"github.com/dark-vinci/wapp/backend/sdk/utils"
 )
 
+//go:generate mockgen -source user.go -destination ./mock/user_mock.go -package mock UserDatabase
 type UserDatabase interface {
 	CreateUser(ctx context.Context, user models.User) (*models.User, error)
 	GetUserByID(ctx context.Context, id uuid.UUID) (*models.User, error)

@@ -58,6 +58,8 @@ func New(z *zerolog.Logger, e *env.Environment) Operations {
 	channelStore := store.NewChannel(db)
 	contactStore := store.NewContact(db)
 
+	logger.Info().Msg("application successfully initialized")
+
 	app := &App{
 		red:          red,
 		env:          e,

@@ -21,6 +21,7 @@ type Contact struct {
 	db     *gorm.DB
 }
 
+//go:generate mockgen -source contacts.go -destination ./mock/contacts_mock.go -package mock ContactDatabase
 type ContactDatabase interface {
 	BlockContact(ctx context.Context, contactID, userID uuid.UUID) error
 	GetUserContacts(ctx context.Context, userID uuid.UUID) ([]account.Contacts, error)
