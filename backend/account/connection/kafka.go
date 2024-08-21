@@ -1,11 +1,11 @@
 package connection
 
 import (
-	"github.com/dark-vinci/wapp/backend/sdk/constants"
 	"github.com/rs/zerolog"
 	"github.com/segmentio/kafka-go"
 
 	"github.com/dark-vinci/wapp/backend/account/env"
+	"github.com/dark-vinci/wapp/backend/sdk/constants"
 )
 
 type Kafka struct {

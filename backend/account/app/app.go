@@ -20,7 +20,9 @@ const packageName string = "account.app"
 type Operations interface {
 	DeleteUserAccount(ctx context.Context, userID uuid.UUID) error
 	CreateUser(ctx context.Context, user models.User) (*models.User, error)
-
+	CreateGroup(ctx context.Context, group account.Group) error
+	DeleteGroup(ctx context.Context, groupID uuid.UUID) error
+	Login(ctx context.Context, userID uuid.UUID) (*models.User, error)
 	CreateContact(ctx context.Context, contact account.Contacts) (*account.Contacts, error)
 	BlockContact(ctx context.Context, userID, contactID uuid.UUID) error
 	UnblockContact(ctx context.Context, userID, contactID uuid.UUID) error
@@ -29,6 +31,7 @@ type Operations interface {
 	RemoveFavouriteContact(ctx context.Context, contactID, userID uuid.UUID) error
 	MakeContactFavourite(ctx context.Context, contactID, userID uuid.UUID) error
 	DeleteContact(ctx context.Context, contactID, userID uuid.UUID) error
+	Ping(ctx context.Context, message string) string
 }
 
 type App struct {
