@@ -34,18 +34,21 @@ type Operations interface {
 	Ping(ctx context.Context, message string) string
 	CreateChannel(ctx context.Context, channel account.Channel) (*account.Channel, error)
 	DeleteChannel(ctx context.Context, channelID uuid.UUID) error
+	AddUser(ctx context.Context, groupID, userID uuid.UUID) error
+	RemoveUserGroup(ctx context.Context, groupID, userID uuid.UUID) error
 }
 
 type App struct {
-	env          *env.Environment
-	red          *connection.RedisClient
-	kafka        *connection.Kafka
-	logger       zerolog.Logger
-	dbConnection *gorm.DB
-	userStore    store.UserDatabase
-	groupStore   store.GroupDatabase
-	channelStore store.ChannelDatabase
-	contactStore store.ContactDatabase
+	env            *env.Environment
+	red            *connection.RedisClient
+	kafka          *connection.Kafka
+	logger         zerolog.Logger
+	dbConnection   *gorm.DB
+	userStore      store.UserDatabase
+	groupStore     store.GroupDatabase
+	channelStore   store.ChannelDatabase
+	contactStore   store.ContactDatabase
+	groupUserStore store.GroupUserDatabase
 }
 
 func New(z *zerolog.Logger, e *env.Environment) Operations {
@@ -59,19 +62,21 @@ func New(z *zerolog.Logger, e *env.Environment) Operations {
 	groupStore := store.NewGroup(db)
 	channelStore := store.NewChannel(db)
 	contactStore := store.NewContact(db)
+	groupUserStore := store.NewGroupUser(db)
 
 	logger.Info().Msg("application successfully initialized")
 
 	app := &App{
-		red:          red,
-		env:          e,
-		logger:       logger,
-		userStore:    *userStore,
-		groupStore:   *groupStore,
-		channelStore: *channelStore,
-		contactStore: *contactStore,
-		dbConnection: db.Connection,
-		kafka:        kafka,
+		red:            red,
+		env:            e,
+		logger:         logger,
+		userStore:      *userStore,
+		groupStore:     *groupStore,
+		channelStore:   *channelStore,
+		contactStore:   *contactStore,
+		groupUserStore: *groupUserStore,
+		dbConnection:   db.Connection,
+		kafka:          kafka,
 	}
 
 	return Operations(app)

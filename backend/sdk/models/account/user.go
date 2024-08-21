@@ -20,10 +20,6 @@ type User struct {
 	DeletedAt   *time.Time
 }
 
-//func (u *User) BeforeCreate(tx *gorm.DB) string {
-//	// hash the user password
-//}
-
 type CreateUser struct {
 	FirstName   string
 	LastName    string
@@ -48,6 +44,7 @@ type Group struct {
 	ID        uuid.UUID `gorm:"primary key"`
 	Name      string
 	CreatedBy uuid.UUID
+	LockChat  bool
 	//ProfileURL *string
 	CreatedAt time.Time
 	UpdatedAt time.Time
@@ -58,16 +55,6 @@ type Channel struct {
 	ID        uuid.UUID `gorm:"primary key"`
 	UserID    uuid.UUID `gorm:"index"`
 	Name      string
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	DeletedAt *time.Time
-}
-
-type UserChannel struct {
-	ID        uuid.UUID `gorm:"primary key"`
-	ChannelID uuid.UUID `gorm:"index"`
-	UserID    uuid.UUID `gorm:"index"`
-	Mute      bool
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt *time.Time
