@@ -28,11 +28,13 @@ func (mt MediaType) String() string {
 }
 
 type Post struct {
-	ID        uuid.UUID `gorm:"primary_key"`
-	UserID    uuid.UUID `gorm:"index"`
-	MediaID   uuid.UUID
-	Type      MediaType
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	DeletedAt *time.Time
+	ID          uuid.UUID `gorm:"primary_key"`
+	UserID      uuid.UUID `gorm:"index"`
+	MediaID     uuid.UUID
+	Type        MediaType
+	Caption     *string
+	TextContent *string
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
+	DeletedAt   *time.Time
 }

@@ -8,6 +8,7 @@ import (
 
 type User struct {
 	ID          uuid.UUID `gorm:"primary key"`
+	Username    *string
 	FirstName   string
 	LastName    string
 	MiddleName  *string
@@ -44,17 +45,8 @@ type Group struct {
 	ID        uuid.UUID `gorm:"primary key"`
 	Name      string
 	CreatedBy uuid.UUID
-	LockChat  bool
+	LockChat  bool //only an admin can post
 	//ProfileURL *string
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	DeletedAt *time.Time
-}
-
-type Channel struct {
-	ID        uuid.UUID `gorm:"primary key"`
-	UserID    uuid.UUID `gorm:"index"`
-	Name      string
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt *time.Time
@@ -68,18 +60,4 @@ type UserGroup struct {
 	UpdatedAt time.Time
 	Mute      bool
 	Deleted   bool
-}
-
-type Contacts struct {
-	ID            string
-	Owner         string
-	ContactID     string
-	ContactNumber string
-	IsVerified    bool
-	IsBlocked     bool
-	IsArchived    bool
-	IsFavorite    bool
-	createdAt     time.Time
-	UpdatedAt     time.Time
-	DeletedAt     time.Time
 }

@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-type UserChat struct {
+type UserChatj struct {
 	ID        uuid.UUID
 	ForUser   uuid.UUID
 	WithUser  uuid.UUID
