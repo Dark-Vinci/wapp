@@ -46,7 +46,7 @@ func (a *App) DeleteGroup(ctx context.Context, groupID uuid.UUID) error {
 	return nil
 }
 
-func (a *App) RemoveUserGroup(ctx context.Context, groupID, userID uuid.UUID) error {
+func (a *App) RemoveUserFromGroup(ctx context.Context, groupID, userID uuid.UUID) error {
 	log := a.logger.With().
 		Str(constants.MethodStrHelper, "app.RemoveUserGroup").
 		Str(constants.RequestID, utils.GetRequestID(ctx)).

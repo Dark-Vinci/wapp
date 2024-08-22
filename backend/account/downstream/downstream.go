@@ -4,6 +4,8 @@ const packageName string = "account.downstream"
 
 type Downstream struct{}
 
-func New() *Downstream {
-	return &Downstream{}
+type DownStreamOperations interface{}
+
+func New() DownStreamOperations {
+	return DownStreamOperations(&Downstream{})
 }

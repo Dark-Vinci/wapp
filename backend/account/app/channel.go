@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	"github.com/google/uuid"
@@ -9,6 +10,7 @@ import (
 
 	"github.com/dark-vinci/wapp/backend/sdk/constants"
 	"github.com/dark-vinci/wapp/backend/sdk/models/account"
+	"github.com/dark-vinci/wapp/backend/sdk/sdkerror"
 	"github.com/dark-vinci/wapp/backend/sdk/utils"
 )
 
@@ -35,6 +37,48 @@ func (a *App) deleteAllUserChannels(ctx context.Context, userID uuid.UUID, tx *g
 
 	if err := a.channelStore.DeleteUserChannels(ctx, userID, time.Now(), tx); err != nil {
 		log.Err(err).Msg("failed to delete user channels")
+		return err
+	}
+
+	return nil
+}
+
+func (a *App) AddUserToChannel(ctx context.Context, userID, channelID uuid.UUID) error {
+	log := a.logger.With().
+		Str(constants.MethodStrHelper, "app.AddUserToChannel").
+		Str(constants.RequestID, utils.GetRequestID(ctx)).
+		Logger()
+
+	log.Info().Msg("adding user to channel")
+
+	if _, err := a.channelStore.GetChannelByID(ctx, channelID); err != nil {
+		log.Err(err).Msg("failed to get channel by id")
+
+		if errors.Is(err, sdkerror.ErrRecordNotFound) {
+			return sdkerror.ErrRecordNotFound
+		}
+
+		return sdkerror.ErrSomethingWentWrong
+	}
+
+	if _, err := a.userStore.GetUserByID(ctx, userID); err != nil {
+		log.Err(err).Msg("failed get user by id")
+		if errors.Is(err, sdkerror.ErrRecordNotFound) {
+			return sdkerror.ErrRecordNotFound
+		}
+
+		return sdkerror.ErrSomethingWentWrong
+	}
+
+	channelUser := account.ChannelUser{
+		ChannelID: channelID,
+		UserID:    userID,
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+	}
+
+	if _, err := a.channelUserStore.Create(ctx, channelUser); err != nil {
+		log.Err(err).Msg("failed add user channel to channel")
 		return err
 	}
 

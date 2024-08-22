@@ -13,14 +13,19 @@ import (
 	"github.com/dark-vinci/wapp/backend/sdk/constants"
 )
 
-//const packageName string = "app.connection"
-
 type DBConn struct {
 	Connection *gorm.DB
 	Log        *zerolog.Logger
 }
 
-//func GetStore(t *testing.T) (sqlmock.Sqlmock, *DBConn) {
+//func GetMockConnection(t *testing.T) (sqlmock.Sqlmock, *DBConn) {
+//	var (
+//		mock sqlmock.Sqlmock
+//		db   *gorm.DB
+//		err  error
+//	)
+//
+//	db, mock, err := gorm_sqlmock
 //}
 
 func NewDBConn(z zerolog.Logger, e *env.Environment) *DBConn {

@@ -17,6 +17,7 @@ import (
 
 const packageName string = "account.app"
 
+//go:generate mockgen -source app.go -destination ./mock/mock_app.go -package mock  Operations
 type Operations interface {
 	DeleteUserAccount(ctx context.Context, userID uuid.UUID) error
 	CreateUser(ctx context.Context, user models.User) (*models.User, error)
@@ -35,26 +36,28 @@ type Operations interface {
 	CreateChannel(ctx context.Context, channel account.Channel) (*account.Channel, error)
 	DeleteChannel(ctx context.Context, channelID uuid.UUID) error
 	AddUser(ctx context.Context, groupID, userID uuid.UUID) error
-	RemoveUserGroup(ctx context.Context, groupID, userID uuid.UUID) error
+	RemoveUserFromGroup(ctx context.Context, groupID, userID uuid.UUID) error
+	AddUserToChannel(ctx context.Context, userID, channelID uuid.UUID) error
 }
 
 type App struct {
-	env            *env.Environment
-	red            *connection.RedisClient
-	kafka          *connection.Kafka
-	logger         zerolog.Logger
-	dbConnection   *gorm.DB
-	userStore      store.UserDatabase
-	groupStore     store.GroupDatabase
-	channelStore   store.ChannelDatabase
-	contactStore   store.ContactDatabase
-	groupUserStore store.GroupUserDatabase
+	env              *env.Environment
+	red              *connection.RedisOps
+	kafka            *connection.Kafka
+	logger           zerolog.Logger
+	dbConnection     *gorm.DB
+	userStore        store.UserDatabase
+	groupStore       store.GroupDatabase
+	channelStore     store.ChannelDatabase
+	contactStore     store.ContactDatabase
+	groupUserStore   store.GroupUserDatabase
+	channelUserStore store.ChannelUserDatabase
 }
 
 func New(z *zerolog.Logger, e *env.Environment) Operations {
 	logger := z.With().Str(constants.PackageStrHelper, packageName).Logger()
 
-	red := connection.NewRedisClient(z, e)
+	red := connection.NewRedis(z, e)
 	db := connection.NewDBConn(*z, e)
 	kafka := connection.NewKafka(*z, e)
 
@@ -63,20 +66,22 @@ func New(z *zerolog.Logger, e *env.Environment) Operations {
 	channelStore := store.NewChannel(db)
 	contactStore := store.NewContact(db)
 	groupUserStore := store.NewGroupUser(db)
+	channelUserStore := store.NewChannelUser(db)
 
 	logger.Info().Msg("application successfully initialized")
 
 	app := &App{
-		red:            red,
-		env:            e,
-		logger:         logger,
-		userStore:      *userStore,
-		groupStore:     *groupStore,
-		channelStore:   *channelStore,
-		contactStore:   *contactStore,
-		groupUserStore: *groupUserStore,
-		dbConnection:   db.Connection,
-		kafka:          kafka,
+		red:              red,
+		env:              e,
+		logger:           logger,
+		userStore:        *userStore,
+		groupStore:       *groupStore,
+		channelStore:     *channelStore,
+		contactStore:     *contactStore,
+		groupUserStore:   *groupUserStore,
+		channelUserStore: *channelUserStore,
+		dbConnection:     db.Connection,
+		kafka:            kafka,
 	}
 
 	return Operations(app)

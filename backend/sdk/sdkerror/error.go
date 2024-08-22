@@ -10,4 +10,6 @@ var (
 	ErrRecordNotFound       = errors.New("record not found")
 	ErrFailedToDeleteRecord = errors.New("failed to delete record")
 	ErrFailedToUpdateRecord = errors.New("failed to update record")
+
+	ErrSomethingWentWrong = errors.New("something went wrong")
 )

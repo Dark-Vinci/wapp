@@ -10,6 +10,7 @@ type ChannelUser struct {
 	ChannelID uuid.UUID `gorm:"index"`
 	UserID    uuid.UUID `gorm:"index"`
 	Mute      bool
+	Blocked   bool
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt *time.Time

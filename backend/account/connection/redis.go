@@ -1,6 +1,8 @@
 package connection
 
 import (
+	"context"
+
 	"github.com/go-redis/redis/v8"
 	"github.com/rs/zerolog"
 
@@ -12,14 +14,16 @@ type RedisClient struct {
 	Val *redis.Client
 }
 
-type RedisInterface interface {
+type RedisOps interface {
+	Get(ctx context.Context, key string) ([]byte, error)
+	Set(ctx context.Context, key string, value []byte) error
 }
 
 func (r *RedisClient) Close() {
 	_ = r.Val.Close()
 }
 
-func NewRedisClient(z *zerolog.Logger, e *env.Environment) *RedisClient {
+func NewRedis(z *zerolog.Logger, e *env.Environment) *RedisOps {
 	log := z.With().Str(constants.PackageStrHelper, packageName).Logger()
 
 	r := redis.NewClient(&redis.Options{
@@ -30,7 +34,19 @@ func NewRedisClient(z *zerolog.Logger, e *env.Environment) *RedisClient {
 
 	log.Info().Msg("connected to redis db")
 
-	return &RedisClient{
+	red := &RedisClient{
 		Val: r,
 	}
+
+	redOps := RedisOps(red)
+
+	return &redOps
+}
+
+func (r *RedisClient) Get(ctx context.Context, key string) ([]byte, error) {
+	return r.Val.WithContext(ctx).Get(ctx, key).Bytes()
+}
+
+func (r *RedisClient) Set(ctx context.Context, key string, value []byte) error {
+	return r.Val.WithContext(ctx).Set(ctx, key, value, 0).Err()
 }
