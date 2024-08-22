@@ -12,4 +12,5 @@ var (
 	ErrFailedToUpdateRecord = errors.New("failed to update record")
 
 	ErrSomethingWentWrong = errors.New("something went wrong")
+	//
 )
