@@ -41,17 +41,20 @@ type Operations interface {
 }
 
 type App struct {
-	env              *env.Environment
-	red              *connection.RedisOps
-	kafka            *connection.Kafka
-	logger           zerolog.Logger
-	dbConnection     *gorm.DB
-	userStore        store.UserDatabase
-	groupStore       store.GroupDatabase
-	channelStore     store.ChannelDatabase
-	contactStore     store.ContactDatabase
-	groupUserStore   store.GroupUserDatabase
-	channelUserStore store.ChannelUserDatabase
+	env               *env.Environment
+	red               *connection.RedisOps
+	kafka             *connection.Kafka
+	logger            zerolog.Logger
+	dbConnection      *gorm.DB
+	userStore         store.UserDatabase
+	groupStore        store.GroupDatabase
+	channelStore      store.ChannelDatabase
+	contactStore      store.ContactDatabase
+	groupUserStore    store.GroupUserDatabase
+	channelUserStore  store.ChannelUserDatabase
+	settingsStore     store.SettingsDatabase
+	userNoteStore     store.UserNoteDatabase
+	userPasswordStore store.UserPasswordDatabase
 }
 
 func New(z *zerolog.Logger, e *env.Environment) Operations {
@@ -67,22 +70,28 @@ func New(z *zerolog.Logger, e *env.Environment) Operations {
 	contactStore := store.NewContact(db)
 	groupUserStore := store.NewGroupUser(db)
 	channelUserStore := store.NewChannelUser(db)
-
-	logger.Info().Msg("application successfully initialized")
+	settingsStore := store.NewSettings(db)
+	userNoteStore := store.NewUserNote(db)
+	userPasswordStore := store.NewUserPassword(db)
 
 	app := &App{
-		red:              red,
-		env:              e,
-		logger:           logger,
-		userStore:        *userStore,
-		groupStore:       *groupStore,
-		channelStore:     *channelStore,
-		contactStore:     *contactStore,
-		groupUserStore:   *groupUserStore,
-		channelUserStore: *channelUserStore,
-		dbConnection:     db.Connection,
-		kafka:            kafka,
+		red:               red,
+		env:               e,
+		logger:            logger,
+		userStore:         *userStore,
+		groupStore:        *groupStore,
+		channelStore:      *channelStore,
+		contactStore:      *contactStore,
+		groupUserStore:    *groupUserStore,
+		channelUserStore:  *channelUserStore,
+		settingsStore:     *settingsStore,
+		userNoteStore:     *userNoteStore,
+		userPasswordStore: *userPasswordStore,
+		dbConnection:      db.Connection,
+		kafka:             kafka,
 	}
+
+	logger.Info().Msg("application successfully initialized")
 
 	return Operations(app)
 }

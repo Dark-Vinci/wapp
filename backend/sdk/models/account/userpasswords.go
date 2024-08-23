@@ -12,7 +12,7 @@ type UserPasswords struct {
 	Password   string
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
-	DeletedAt  time.Time
+	DeletedAt  *time.Time
 }
 
 func (u *UserPasswords) From(payload CreatePasswordPayload) {

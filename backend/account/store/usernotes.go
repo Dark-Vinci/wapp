@@ -46,7 +46,7 @@ func NewUserNote(conn *connection.DBConn) *UserNoteDatabase {
 
 func (u *UserNotes) Create(ctx context.Context, userNote account.UserNotes) (*account.UserNotes, error) {
 	log := u.logger.With().
-		Str(constants.MethodStrHelper, "usernote.Create").
+		Str(constants.MethodStrHelper, "userNote.Create").
 		Str(constants.RequestID, utils.GetRequestID(ctx)).
 		Logger()
 
@@ -67,7 +67,7 @@ func (u *UserNotes) Create(ctx context.Context, userNote account.UserNotes) (*ac
 
 func (u *UserNotes) Update(ctx context.Context, userNote account.UserNotes) error {
 	log := u.logger.With().
-		Str(constants.MethodStrHelper, "usernote.Update").
+		Str(constants.MethodStrHelper, "userNote.Update").
 		Str(constants.RequestID, utils.GetRequestID(ctx)).
 		Logger()
 
@@ -88,7 +88,7 @@ func (u *UserNotes) Update(ctx context.Context, userNote account.UserNotes) erro
 
 func (u *UserNotes) Delete(ctx context.Context, deletedAt time.Time, userID, noteID uuid.UUID) error {
 	log := u.logger.With().
-		Str(constants.MethodStrHelper, "usernote.DeleteUser").
+		Str(constants.MethodStrHelper, "userNote.DeleteUser").
 		Str(constants.RequestID, utils.GetRequestID(ctx)).
 		Logger()
 
