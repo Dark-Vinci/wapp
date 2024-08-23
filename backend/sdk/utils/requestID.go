@@ -3,6 +3,8 @@ package utils
 import (
 	"context"
 
+	"github.com/google/uuid"
+
 	"github.com/dark-vinci/wapp/backend/sdk/constants"
 )
 
@@ -13,5 +15,5 @@ func GetRequestID(ctx context.Context) string {
 		return val.(string)
 	}
 
-	return "ZERO_UUID"
+	return uuid.UUID{}.String()
 }

@@ -12,9 +12,9 @@ type UserChat struct {
 	ToUser     uuid.UUID
 	FromChatID *uuid.UUID
 	Content    string
-	Received   bool
-	Viewed     bool
-	Starred    bool
+	Received   *time.Time
+	Viewed     *time.Time
+	Starred    *time.Time
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
 	DeletedAt  *time.Time

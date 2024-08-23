@@ -1,10 +1,16 @@
 package chats
 
-import "github.com/google/uuid"
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
 
 type UserChatSettings struct {
+	ID              uuid.UUID
 	ReadReceipt     bool
 	ReceivedReceipt bool
 	UserID          uuid.UUID
-	ID              uuid.UUID
+	CreatedAt       time.Time
+	DeletedAt       *time.Time
 }
