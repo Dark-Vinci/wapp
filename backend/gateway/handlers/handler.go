@@ -9,6 +9,7 @@ import (
 
 	"github.com/dark-vinci/wapp/backend/gateway/app"
 	"github.com/dark-vinci/wapp/backend/gateway/env"
+	"github.com/dark-vinci/wapp/backend/gateway/handlers/api"
 	appSocket "github.com/dark-vinci/wapp/backend/gateway/handlers/socket"
 )
 
@@ -55,6 +56,8 @@ func (h *Handler) Build() {
 			"response": "200",
 		})
 	})
+
+	api.New(apiGroup)
 
 	//socket IO
 	h.engine.GET("/socket.io/*any", authentication, gin.WrapH(h.socketServer))

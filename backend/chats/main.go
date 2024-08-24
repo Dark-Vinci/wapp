@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/dark-vinci/isok"
+	//"github.com/dark-vinci/isok"
 )
 
 func main() {

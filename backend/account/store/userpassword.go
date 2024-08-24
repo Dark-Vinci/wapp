@@ -20,6 +20,7 @@ type UserPassword struct {
 	db     *gorm.DB
 }
 
+//go:generate mockgen -source userpassword.go -destination ./mock/userpassword_mock.go -package mock UserPasswordDatabase
 type UserPasswordDatabase interface {
 	Create(ctx context.Context, userPassword account.UserPasswords) (*account.UserPasswords, error)
 	Update(ctx context.Context, userPassword account.UserPasswords) error
