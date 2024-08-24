@@ -1,0 +1,10 @@
+syntax = "proto3";
+package wapp.media;
+
+option go_package = "github.com/dark-vinci/wapp/backend/sdk/grpc/media";
+
+import "google/protobuf/empty.proto";
+
+message PingRequest {
+  string data = 1;
+}

@@ -14,6 +14,7 @@ type RedisClient struct {
 	Val *redis.Client
 }
 
+//go:generate mockgen -source redis.go -destination ./mock/redis_mock.go -package mock RedisOps
 type RedisOps interface {
 	Get(ctx context.Context, key string) ([]byte, error)
 	Set(ctx context.Context, key string, value []byte) error

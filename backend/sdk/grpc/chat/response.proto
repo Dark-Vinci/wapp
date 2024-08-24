@@ -1,0 +1,10 @@
+syntax = "proto3";
+package wapp.chat;
+
+option go_package = "github.com/dark-vinci/wapp/backend/sdk/grpc/chat";
+
+import "google/protobuf/empty.proto";
+
+message PingResponse {
+  string data = 1;
+}

@@ -8,7 +8,7 @@ import (
 	"github.com/dark-vinci/wapp/backend/sdk/utils"
 )
 
-const packageName = "account.env"
+const packageName = "media.env"
 
 type Environment struct {
 	AppPort            string
@@ -30,7 +30,7 @@ type Environment struct {
 	ClickHousePassword string
 }
 
-//const a = 12
+const a = 12
 
 func (e *Environment) MigrationConfig() *utils.MigrationConfig {
 	return &utils.MigrationConfig{

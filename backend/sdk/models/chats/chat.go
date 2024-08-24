@@ -6,25 +6,25 @@ import (
 	"github.com/google/uuid"
 )
 
-type UserChat struct {
-	ID         uuid.UUID
-	FromUser   uuid.UUID
-	ToUser     uuid.UUID
-	FromChatID *uuid.UUID
-	Content    string
-	Received   *time.Time
-	Viewed     *time.Time
-	Starred    *time.Time
-	CreatedAt  time.Time
-	UpdatedAt  time.Time
-	DeletedAt  *time.Time
+type UserMessage struct {
+	ID            uuid.UUID
+	FromUser      uuid.UUID
+	ToUser        uuid.UUID
+	FromMessageID *uuid.UUID
+	Content       string
+	Received      *time.Time
+	Viewed        *time.Time
+	Starred       *time.Time
+	CreatedAt     time.Time
+	UpdatedAt     time.Time
+	DeletedAt     *time.Time
 }
 
-type GroupChat struct {
+type GroupMessage struct {
 	ID             uuid.UUID
 	GroupID        uuid.UUID
 	FromUser       uuid.UUID
-	FromChatID     *uuid.UUID
+	FromMessageID  *uuid.UUID
 	Content        string
 	Starred        bool
 	PictureGroupID *uuid.UUID
@@ -33,11 +33,11 @@ type GroupChat struct {
 	DeletedAt      *time.Time
 }
 
-type ChannelChat struct {
+type ChannelMessage struct {
 	ID             uuid.UUID
 	ChannelID      uuid.UUID
 	FromUser       uuid.UUID
-	FromChatID     *uuid.UUID // replying to a chat
+	FromMessageID  *uuid.UUID // replying to a chat
 	Content        string
 	Starred        bool
 	PictureGroupID *uuid.UUID
