@@ -11,6 +11,9 @@ type UserMessage struct {
 	FromUser      uuid.UUID
 	ToUser        uuid.UUID
 	FromMessageID *uuid.UUID
+	ForwardedFrom *uuid.UUID
+	ForwardedTo   *uuid.UUID
+	ForwardedBy   *uuid.UUID
 	Content       string
 	Received      *time.Time
 	Viewed        *time.Time

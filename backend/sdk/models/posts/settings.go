@@ -21,10 +21,10 @@ type SelectedContacts struct {
 	DeletedAt      *time.Time
 }
 
-type ExceptContacts struct {
-	UserID         uuid.UUID
-	PostSettingsID uuid.UUID
-	PosterID       uuid.UUID
-	CreatedAt      time.Time
-	DeletedAt      *time.Time
-}
+//type ExceptContacts struct {
+//	UserID         uuid.UUID
+//	PostSettingsID uuid.UUID
+//	PosterID       uuid.UUID
+//	CreatedAt      time.Time
+//	DeletedAt      *time.Time
+//}

@@ -16,9 +16,9 @@ func New(database, username, password string) *Click {
 	conn, err := clickhouse.Open(&clickhouse.Options{
 		Addr: []string{fmt.Sprintf("%s:%v", "", "")},
 		Auth: clickhouse.Auth{
-			Database: "",
-			Username: "",
-			Password: "",
+			Database: database,
+			Username: username,
+			Password: password,
 		},
 	})
 

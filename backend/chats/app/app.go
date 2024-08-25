@@ -18,20 +18,26 @@ type App struct {
 	channelMessageStore *store.ChannelMessageDatabase
 	messageStore        *store.MessageDatabase
 	groupMessageStore   *store.GroupMessageDatabase
+	pollVoteStore       *store.PollVoteDatabase
+	pollStore           *store.PollDatabase
+	pollOptionStore     *store.PollOptionDatabase
+	settingsStore       *store.SettingsDatabase
 	db                  *gorm.DB
 	logger              *zerolog.Logger
 }
 
 func New(z *zerolog.Logger, e *env.Environment) Operations {
 	logger := z.With().
-		Str(constants.FunctionNameHelper, "New").
-		Str(constants.PackageStrHelper, packageName).
-		Logger()
+		Str(constants.PackageStrHelper, packageName).Logger()
 
 	db := connections.NewDBConn(*z, e)
 	channelMessageStore := store.NewChannelMessageDatabase(db)
 	messageStore := store.NewMessageDatabase(db)
 	groupMessageStore := store.NewGroupMessageDatabase(db)
+	pollStore := store.NewPollDatabase(db)
+	pollVoteStore := store.NewPollVoteDatabase(db)
+	pollOptionStore := store.NewPollOptionDatabase(db)
+	settingsStore := store.NewSettingsDatabase(db)
 
 	app := &App{
 		logger:              &logger,
@@ -39,6 +45,10 @@ func New(z *zerolog.Logger, e *env.Environment) Operations {
 		channelMessageStore: channelMessageStore,
 		messageStore:        messageStore,
 		groupMessageStore:   groupMessageStore,
+		pollStore:           pollStore,
+		pollVoteStore:       pollVoteStore,
+		pollOptionStore:     pollOptionStore,
+		settingsStore:       settingsStore,
 	}
 
 	logger.Info().Msg("Application(app) successfully initialized")
