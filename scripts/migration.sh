@@ -33,17 +33,11 @@ case $1 in
     goose create "$2" go
     create "$2" go;;
 
-  "reactions")
+  "media")
     echo "about to cd into reactions service to generate migration"
     cd ../backend/reactions/migrations
     goose create "$2" go
     create "$2" go;;
-
-  "utils")
-      echo "about to cd into utils service to generate migration"
-      cd ../backend/utils/migrations
-      goose create "$2" go
-      create "$2" go;;
 
   *)
     echo "No known service was chosen";;
