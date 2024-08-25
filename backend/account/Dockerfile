@@ -1,6 +1,6 @@
 FROM golang:1.22-alpine
 
-WORKDIR /go/src/github.com/dark-vinci/linkedout/account
+WORKDIR /go/src/github.com/dark-vinci/wapp/account
 
 ARG port=5050
 ARG app_env=development
@@ -8,8 +8,8 @@ ARG app_env=development
 ENV PORT="$port"
 ENV APP_ENV="$app_env"
 
-COPY sdk /go/src/github.com/dark-vinci/linkedout/sdk
-COPY account /go/src/github.com/dark-vinci/linkedout/account
+COPY sdk /go/src/github.com/dark-vinci/wapp/sdk
+COPY account /go/src/github.com/dark-vinci/wapp/account
 
 RUN go mod tidy
 RUN go get ./...

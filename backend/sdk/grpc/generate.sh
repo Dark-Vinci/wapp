@@ -17,4 +17,4 @@ protoc --go_out=plugins=grpc:. --go_opt=paths=source_relative ./chat/*.proto
 # gen for the withdrawal service
 protoc --go_out=plugins=grpc:. --go_opt=paths=source_relative ./media/*.proto
 ## gen for the banking service
-#protoc --go_out=plugins=grpc:. --go_opt=paths=source_relative ./banking/*.proto
+protoc --go_out=plugins=grpc:. --go_opt=paths=source_relative ./post/*.proto

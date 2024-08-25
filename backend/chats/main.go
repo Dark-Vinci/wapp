@@ -48,7 +48,7 @@ func main() {
 
 	// grpc server initialize
 	grpcServer := grpc.NewServer()
-	chat.RegisterAccountServer(grpcServer, server.New(e, appLogger, a))
+	chat.RegisterChatServer(grpcServer, server.New(e, appLogger, a))
 
 	listener, err := net.Listen("tcp", fmt.Sprintf(":%s", e.AppPort))
 

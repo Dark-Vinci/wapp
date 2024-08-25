@@ -1,0 +1,11 @@
+syntax = "proto3";
+package wapp.post;
+
+option go_package = "github.com/dark-vinci/wapp/backend/sdk/grpc/post";
+
+import "post/request.proto";
+import "post/response.proto";
+
+service Post {
+  rpc Ping(PingRequest) returns (PingResponse) {}
+}

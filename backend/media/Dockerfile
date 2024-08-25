@@ -1,6 +1,6 @@
 FROM golang:1.22-alpine
 
-WORKDIR /go/src/github.com/dark-vinci/wapp/post
+WORKDIR /go/src/github.com/dark-vinci/wapp/media
 
 ARG port=5050
 ARG app_env=development
@@ -9,7 +9,7 @@ ENV PORT="$port"
 ENV APP_ENV="$app_env"
 
 COPY sdk /go/src/github.com/dark-vinci/wapp/sdk
-COPY post /go/src/github.com/dark-vinci/wapp/post
+COPY media /go/src/github.com/dark-vinci/wapp/media
 
 RUN go mod tidy
 RUN go get ./...
@@ -17,7 +17,7 @@ RUN go build
 RUN go get github.com/pilu/fresh
 
 CMD if [[ "$APP_ENV" -eq production ]]; then \
-        post \
+        media \
     else \
         fresh \
     fi
