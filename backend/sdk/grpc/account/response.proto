@@ -3,8 +3,6 @@ package wapp.account;
 
 option go_package = "github.com/dark-vinci/wapp/backend/sdk/grpc/account";
 
-import "google/protobuf/empty.proto";
-
 message PingResponse {
   string data = 1;
 }

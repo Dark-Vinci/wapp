@@ -201,7 +201,7 @@ func (c *Contact) Delete(ctx context.Context, deletedAt time.Time, contactID, us
 
 	log.Info().Msgf("Got a request to delete a contact with id %s with user %s", contactID.String(), userID.String())
 
-	if res := c.db.WithContext(ctx).Model(&account.Contacts{}).Where("owner_id = ? AND id = ?", userID, contactID).UpdateColumns(account.Contacts{DeletedAt: deletedAt}); res.Error != nil {
+	if res := c.db.WithContext(ctx).Model(&account.Contacts{}).Where("owner_id = ? AND id = ?", userID, contactID).UpdateColumns(account.Contacts{DeletedAt: &deletedAt}); res.Error != nil {
 		log.Err(res.Error).Msg("Failed to delete contact")
 
 		if errors.Is(res.Error, gorm.ErrRecordNotFound) {
@@ -225,7 +225,7 @@ func (c *Contact) DeleteAllUserContacts(ctx context.Context, userID uuid.UUID, d
 	if tx != nil {
 		log.Info().Msg("deleting all user contact in a transaction")
 
-		if err := tx.WithContext(ctx).Model(&account.Contacts{}).Where("user_id = ?", userID).UpdateColumns(&account.Contacts{DeletedAt: deletedAt}).Error; err != nil {
+		if err := tx.WithContext(ctx).Model(&account.Contacts{}).Where("user_id = ?", userID).UpdateColumns(&account.Contacts{DeletedAt: &deletedAt}).Error; err != nil {
 			log.Err(err).Msg("Failed to delete all contacts")
 
 			if errors.Is(err, gorm.ErrRecordNotFound) {

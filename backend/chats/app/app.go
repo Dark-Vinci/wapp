@@ -22,6 +22,8 @@ type App struct {
 	pollStore           *store.PollDatabase
 	pollOptionStore     *store.PollOptionDatabase
 	settingsStore       *store.SettingsDatabase
+	callStore           *store.CallDatabase
+	userCallStore       *store.UserCallDatabase
 	db                  *gorm.DB
 	logger              *zerolog.Logger
 }
@@ -38,6 +40,8 @@ func New(z *zerolog.Logger, e *env.Environment) Operations {
 	pollVoteStore := store.NewPollVoteDatabase(db)
 	pollOptionStore := store.NewPollOptionDatabase(db)
 	settingsStore := store.NewSettingsDatabase(db)
+	callStore := store.NewCallDatabase(db)
+	userCallStore := store.NewUserCallDatabase(db)
 
 	app := &App{
 		logger:              &logger,
@@ -49,6 +53,8 @@ func New(z *zerolog.Logger, e *env.Environment) Operations {
 		pollVoteStore:       pollVoteStore,
 		pollOptionStore:     pollOptionStore,
 		settingsStore:       settingsStore,
+		callStore:           callStore,
+		userCallStore:       userCallStore,
 	}
 
 	logger.Info().Msg("Application(app) successfully initialized")

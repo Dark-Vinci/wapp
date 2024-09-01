@@ -19,7 +19,7 @@ import (
 	"github.com/dark-vinci/wapp/backend/sdk/utils/clickhouse"
 )
 
-const AppName = "chat.main"
+const AppName = "chats.main"
 const AppNameKey = "APP_NAME"
 
 func main() {

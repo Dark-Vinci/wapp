@@ -77,15 +77,3 @@ func (a *App) DeleteUserAccount(ctx context.Context, userID uuid.UUID) error {
 
 	return nil
 }
-
-func (a *App) Login(ctx context.Context, userID uuid.UUID) (*models.User, error) {
-	log := a.logger.With().
-		Str(constants.MethodStrHelper, "app.Login").
-		Str(constants.RequestID, utils.GetRequestID(ctx)).
-		Str(constants.PackageStrHelper, packageName).
-		Logger()
-
-	log.Info().Msg("Request to login user")
-
-	return nil, nil
-}

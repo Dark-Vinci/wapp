@@ -16,6 +16,8 @@ const (
 	FunctionNameHelper  = "FUNCTION_NAME"
 	RequestIDContextKey = "REQUEST_ID_CONTEXT_KEY"
 	RequestID           = "REQUEST_ID"
+
+	AppNameKey = "APP_NAME"
 )
 
 const (

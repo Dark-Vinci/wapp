@@ -4,9 +4,9 @@ go 1.22.1
 
 require (
 	github.com/google/uuid v1.6.0
-	github.com/pressly/goose/v3 v3.21.1
+	github.com/pressly/goose/v3 v3.15.1
 	github.com/rs/zerolog v1.33.0
-	google.golang.org/grpc v1.65.0
+	google.golang.org/grpc v1.57.0
 	google.golang.org/protobuf v1.34.2
 )
 

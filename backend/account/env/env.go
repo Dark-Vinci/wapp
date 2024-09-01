@@ -45,7 +45,7 @@ func NewEnv() *Environment {
 	shouldMigrate, _ := strconv.ParseBool(p)
 
 	return &Environment{
-		AppPort:            os.Getenv(constants.AppPort),
+		AppPort:            "50501", //os.Getenv(constants.AppPort),
 		AppEnvironment:     constants.FromStr(os.Getenv(constants.AppPort)),
 		ShouldMigrate:      shouldMigrate,
 		KafkaURL:           os.Getenv(constants.KafkaURL),
@@ -59,8 +59,8 @@ func NewEnv() *Environment {
 		PgSlaveUser:        os.Getenv(constants.PgSlaveUser),
 		PgMasterPassword:   os.Getenv(constants.PgMasterPassword),
 		PgSlavePassword:    os.Getenv(constants.PgSlavePassword),
-		ClickHouseDatabase: os.Getenv(constants.ClickHouseDatabase),
-		ClickHousePassword: os.Getenv(constants.ClickHousePassword),
-		ClickHouseUsername: os.Getenv(constants.ClickHouseUsername),
+		ClickHouseDatabase: "mydatabase", //os.Getenv(constants.ClickHouseDatabase),
+		ClickHousePassword: "",           //os.Getenv(constants.ClickHousePassword),
+		ClickHouseUsername: "",           //os.Getenv(constants.ClickHouseUsername),
 	}
 }
