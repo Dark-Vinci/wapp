@@ -80,8 +80,6 @@ func main() {
 
 	listener, err := net.Listen("tcp", fmt.Sprintf(":%s", e.AppPort))
 
-	fmt.Println("FINAL PORT", listener.Addr().String())
-
 	if err != nil {
 		appLogger.Fatal().Err(err).Msg("net.Listen failed")
 	}
