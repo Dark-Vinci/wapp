@@ -1,5 +1,5 @@
 export * from './Screen';
 export * from './ErrorBoundary';
-export * from './IF_ELSE';
+export * from './IfElse';
 export * from './FallBack';
 export * from './If';

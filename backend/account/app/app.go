@@ -61,37 +61,37 @@ type App struct {
 func New(z *zerolog.Logger, e *env.Environment) Operations {
 	logger := z.With().Str(constants.PackageStrHelper, packageName).Logger()
 
-	//red := connection.NewRedis(z, e)
-	//db := connection.NewDBConn(*z, e)
-	//kafka := connection.NewKafka(*z, e)
-	//
-	//userStore := store.NewUser(db)
-	//groupStore := store.NewGroup(db)
-	//channelStore := store.NewChannel(db)
-	//contactStore := store.NewContact(db)
-	//groupUserStore := store.NewGroupUser(db)
-	//channelUserStore := store.NewChannelUser(db)
-	//settingsStore := store.NewSettings(db)
-	//userNoteStore := store.NewUserNote(db)
-	//userPasswordStore := store.NewUserPassword(db)
-	//lastSeenStore := store.NewLastSeen(db)
+	red := connection.NewRedis(z, e)
+	db := connection.NewDBConn(*z, e)
+	kafka := connection.NewKafka(*z, e)
+	
+	userStore := store.NewUser(db)
+	groupStore := store.NewGroup(db)
+	channelStore := store.NewChannel(db)
+	contactStore := store.NewContact(db)
+	groupUserStore := store.NewGroupUser(db)
+	channelUserStore := store.NewChannelUser(db)
+	settingsStore := store.NewSettings(db)
+	userNoteStore := store.NewUserNote(db)
+	userPasswordStore := store.NewUserPassword(db)
+	lastSeenStore := store.NewLastSeen(db)
 
 	app := &App{
-		//red:               red,
+		red:               red,
 		env:    e,
 		logger: logger,
-		//userStore:         *userStore,
-		//groupStore:        *groupStore,
-		//channelStore:      *channelStore,
-		//contactStore:      *contactStore,
-		//groupUserStore:    *groupUserStore,
-		//channelUserStore:  *channelUserStore,
-		//settingsStore:     *settingsStore,
-		//userNoteStore:     *userNoteStore,
-		//userPasswordStore: *userPasswordStore,
-		//lastSeen:          *lastSeenStore,
-		//dbConnection:      db.Connection,
-		//kafka:             kafka,
+		userStore:         *userStore,
+		groupStore:        *groupStore,
+		channelStore:      *channelStore,
+		contactStore:      *contactStore,
+		groupUserStore:    *groupUserStore,
+		channelUserStore:  *channelUserStore,
+		settingsStore:     *settingsStore,
+		userNoteStore:     *userNoteStore,
+		userPasswordStore: *userPasswordStore,
+		lastSeen:          *lastSeenStore,
+		dbConnection:      db.Connection,
+		kafka:             kafka,
 	}
 
 	logger.Info().Msg("application successfully initialized")

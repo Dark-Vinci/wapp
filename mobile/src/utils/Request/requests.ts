@@ -1,4 +1,4 @@
-import { Axios } from 'axios';
+import { Axios, AxiosResponse } from 'axios';
 
 import { instantiate } from './axios';
 import { RequestURI } from '../contants';
@@ -10,9 +10,12 @@ export class Requests {
     this.axios = instantiate(token);
   }
 
-  public async ping(): Promise<string> {
-    const data = await this.axios.get(RequestURI.PING, {});
+  public async ping<T = any>(): Promise<T> {
+    const data: AxiosResponse<T, any> = await this.axios.get(
+      RequestURI.PING,
+      {},
+    );
 
-    return data as unknown as string;
+    return data as unknown as T;
   }
 }

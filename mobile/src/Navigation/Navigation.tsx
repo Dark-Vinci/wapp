@@ -1,4 +1,4 @@
-import { JSX } from 'react';
+import React, { JSX } from 'react';
 import { View, Text } from 'react-native';
 
 export function Navigation(): JSX.Element {

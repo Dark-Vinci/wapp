@@ -4,7 +4,9 @@ import {
   useSelector as useReduxSelector,
 } from 'react-redux';
 
-export type AppState = {};
+export type AppState = {
+  name: string;
+};
 
 export const rootReducers = combineReducers<AppState>({});
 

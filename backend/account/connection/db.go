@@ -18,15 +18,15 @@ type DBConn struct {
 	Log        *zerolog.Logger
 }
 
-//func GetMockConnection(t *testing.T) (sqlmock.Sqlmock, *DBConn) {
-//	var (
-//		mock sqlmock.Sqlmock
-//		db   *gorm.DB
-//		err  error
-//	)
-//
-//	db, mock, err := gorm_sqlmock
-//}
+// func GetMockConnection(t *testing.T) (sqlmock.Sqlmock, *DBConn) {
+// 	var (
+// 		mock sqlmock.Sqlmock
+// 		db   *gorm.DB
+// 		err  error
+// 	)
+
+// 	db, mock, err := gorm_sqlmock
+// }
 
 func NewDBConn(z zerolog.Logger, e *env.Environment) *DBConn {
 	log := z.With().Str(constants.PackageStrHelper, packageName).Logger()

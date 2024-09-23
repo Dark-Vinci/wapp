@@ -1,4 +1,4 @@
-import { JSX } from 'react';
+import React, { JSX } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
 import { Screen } from '@components';
