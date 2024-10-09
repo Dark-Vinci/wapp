@@ -1,4 +1,4 @@
-package connection
+package redis
 
 import (
 	"context"
@@ -6,48 +6,51 @@ import (
 	"github.com/go-redis/redis/v8"
 	"github.com/rs/zerolog"
 
-	"github.com/dark-vinci/wapp/backend/account/env"
 	"github.com/dark-vinci/wapp/backend/sdk/constants"
 )
 
-type RedisClient struct {
+const packageName = "sdk.redis"
+
+type Client struct {
 	Val *redis.Client
 }
 
 //go:generate mockgen -source redis.go -destination ./mock/redis_mock.go -package mock RedisOps
-type RedisOps interface {
+type Operations interface {
 	Get(ctx context.Context, key string) ([]byte, error)
 	Set(ctx context.Context, key string, value []byte) error
+	Close() error
 }
 
-func (r *RedisClient) Close() {
-	_ = r.Val.Close()
-}
-
-func NewRedis(z *zerolog.Logger, e *env.Environment) *RedisOps {
+func NewRedis(z *zerolog.Logger, addr, password, username string) *Operations {
 	log := z.With().Str(constants.PackageStrHelper, packageName).Logger()
 
 	r := redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379", // Redis server address
-		Password: "",               // No password set
-		DB:       0,                // Use default DB
+		Addr:     addr,     // Redis server address
+		Password: password, // No password set
+		DB:       0,        // Use default DB
+		Username: username,
 	})
 
 	log.Info().Msg("connected to redis db")
 
-	red := &RedisClient{
+	red := &Client{
 		Val: r,
 	}
 
-	redOps := RedisOps(red)
+	redOps := Operations(red)
 
 	return &redOps
 }
 
-func (r *RedisClient) Get(ctx context.Context, key string) ([]byte, error) {
+func (r *Client) Get(ctx context.Context, key string) ([]byte, error) {
 	return r.Val.WithContext(ctx).Get(ctx, key).Bytes()
 }
 
-func (r *RedisClient) Set(ctx context.Context, key string, value []byte) error {
+func (r *Client) Close() error {
+	return r.Val.Close()
+}
+
+func (r *Client) Set(ctx context.Context, key string, value []byte) error {
 	return r.Val.WithContext(ctx).Set(ctx, key, value, 0).Err()
 }

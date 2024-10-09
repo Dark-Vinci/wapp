@@ -26,8 +26,6 @@ import (
 	"github.com/dark-vinci/wapp/backend/sdk/utils/clickhouse"
 )
 
-// insta, wapp, slack, eats
-
 const AppName = "account.main"
 
 func main() {
@@ -68,7 +66,7 @@ func main() {
 
 	if e.ShouldMigrate {
 		err = utils.Migration(context.Background(), &logger, *e.MigrationConfig(), AppName)
-	
+
 		if err != nil {
 			appLogger.Fatal().Err(err).Msg("migration failed")
 		}
