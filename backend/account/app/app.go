@@ -9,7 +9,6 @@ import (
 	k "github.com/segmentio/kafka-go"
 	"gorm.io/gorm"
 
-	"github.com/dark-vinci/wapp/backend/account/connection"
 	"github.com/dark-vinci/wapp/backend/account/env"
 	"github.com/dark-vinci/wapp/backend/account/store"
 	"github.com/dark-vinci/wapp/backend/sdk/constants"
@@ -23,6 +22,9 @@ const packageName string = "account.app"
 
 //go:generate mockgen -source app.go -destination ./mock/mock_app.go -package mock  Operations
 type Operations interface {
+	Logout(ctx context.Context) error
+	Register(ctx context.Context, details LoginRequest) (*account.User, error)
+	VerifyOTP(ctx context.Context, otp string) error
 	DeleteUserAccount(ctx context.Context, userID uuid.UUID) error
 	CreateUser(ctx context.Context, user models.User) (*models.User, error)
 	CreateGroup(ctx context.Context, group account.Group) error
@@ -67,7 +69,7 @@ func New(z *zerolog.Logger, e *env.Environment) Operations {
 	logger := z.With().Str(constants.PackageStrHelper, packageName).Logger()
 
 	red := redis.NewRedis(z, "", "", "")
-	db := connection.NewDBConn(*z, e)
+	db := store.NewStore(*z, e)
 	kafkaReader := kafka.NewReader([]string{}, "", "", "")
 	kafkaWriter := kafka.NewWriter("", "")
 

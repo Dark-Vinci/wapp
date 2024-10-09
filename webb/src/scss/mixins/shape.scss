@@ -1,0 +1,16 @@
+
+@mixin Reactangle($w: 100%, $h: 100%) {
+    width: $w;
+    height: $h;
+}
+
+@mixin Square($w: 100%) {
+    width: $w;
+    height: $w;
+}
+
+@mixin Circle($r: 100%) {
+    width: $r;
+    height: $r;
+    border-radius: 100%;
+}

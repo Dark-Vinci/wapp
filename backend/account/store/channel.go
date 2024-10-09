@@ -9,7 +9,6 @@ import (
 	"github.com/rs/zerolog"
 	"gorm.io/gorm"
 
-	"github.com/dark-vinci/wapp/backend/account/connection"
 	"github.com/dark-vinci/wapp/backend/sdk/constants"
 	"github.com/dark-vinci/wapp/backend/sdk/models/account"
 	"github.com/dark-vinci/wapp/backend/sdk/sdkerror"
@@ -29,7 +28,7 @@ type ChannelDatabase interface {
 	DeleteUserChannels(ctx context.Context, userID uuid.UUID, deletedAt time.Time, tx *gorm.DB) error
 }
 
-func NewChannel(conn *connection.DBConn) *ChannelDatabase {
+func NewChannel(conn *Store) *ChannelDatabase {
 	log := conn.Log.With().
 		Str(constants.FunctionNameHelper, "NewChannel").
 		Str(constants.PackageStrHelper, packageName).

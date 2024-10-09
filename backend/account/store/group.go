@@ -9,7 +9,6 @@ import (
 	"github.com/rs/zerolog"
 	"gorm.io/gorm"
 
-	"github.com/dark-vinci/wapp/backend/account/connection"
 	"github.com/dark-vinci/wapp/backend/sdk/constants"
 	"github.com/dark-vinci/wapp/backend/sdk/models"
 	"github.com/dark-vinci/wapp/backend/sdk/models/account"
@@ -30,7 +29,7 @@ type GroupDatabase interface {
 	DeleteAllUserGroup(ctx context.Context, userID uuid.UUID, deletedAt time.Time, tx *gorm.DB) error
 }
 
-func NewGroup(conn *connection.DBConn) *GroupDatabase {
+func NewGroup(conn *Store) *GroupDatabase {
 	l := conn.Log.With().Str(constants.FunctionNameHelper, "NewGroup").Logger()
 
 	group := &Group{

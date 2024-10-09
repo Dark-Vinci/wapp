@@ -9,7 +9,6 @@ import (
 	"github.com/rs/zerolog"
 	"gorm.io/gorm"
 
-	"github.com/dark-vinci/wapp/backend/account/connection"
 	"github.com/dark-vinci/wapp/backend/sdk/constants"
 	"github.com/dark-vinci/wapp/backend/sdk/models"
 	"github.com/dark-vinci/wapp/backend/sdk/sdkerror"
@@ -28,7 +27,7 @@ type User struct {
 	connection *gorm.DB
 }
 
-func NewUser(db *connection.DBConn) *UserDatabase {
+func NewUser(db *Store) *UserDatabase {
 	l := db.Log.With().
 		Str(constants.FunctionNameHelper, "NewUser").
 		Str(constants.PackageStrHelper, packageName).

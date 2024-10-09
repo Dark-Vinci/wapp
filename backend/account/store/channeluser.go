@@ -9,7 +9,6 @@ import (
 	"github.com/rs/zerolog"
 	"gorm.io/gorm"
 
-	"github.com/dark-vinci/wapp/backend/account/connection"
 	"github.com/dark-vinci/wapp/backend/sdk/constants"
 	"github.com/dark-vinci/wapp/backend/sdk/models/account"
 	"github.com/dark-vinci/wapp/backend/sdk/sdkerror"
@@ -29,7 +28,7 @@ type ChannelUserDatabase interface {
 	UnBlockUser(ctx context.Context, now time.Time, channelID, userID uuid.UUID) error
 }
 
-func NewChannelUser(conn *connection.DBConn) *ChannelUserDatabase {
+func NewChannelUser(conn *Store) *ChannelUserDatabase {
 	logger := conn.Log.With().
 		Str(constants.FunctionNameHelper, "NewChannelUser").
 		Str(constants.PackageStrHelper, packageName).Logger()

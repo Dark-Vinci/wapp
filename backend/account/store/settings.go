@@ -7,7 +7,6 @@ import (
 	"github.com/rs/zerolog"
 	"gorm.io/gorm"
 
-	"github.com/dark-vinci/wapp/backend/account/connection"
 	"github.com/dark-vinci/wapp/backend/sdk/constants"
 	"github.com/dark-vinci/wapp/backend/sdk/models/account"
 )
@@ -24,7 +23,7 @@ type SettingsDatabase interface {
 	Update(ctx context.Context, settings account.Settings) (*account.Settings, error)
 }
 
-func NewSettings(conn *connection.DBConn) *SettingsDatabase {
+func NewSettings(conn *Store) *SettingsDatabase {
 	logger := conn.Log.With().
 		Str(constants.FunctionNameHelper, "NewSettings").
 		Str(constants.PackageStrHelper, packageName).

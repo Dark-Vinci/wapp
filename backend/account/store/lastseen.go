@@ -7,7 +7,6 @@ import (
 	"github.com/rs/zerolog"
 	"gorm.io/gorm"
 
-	"github.com/dark-vinci/wapp/backend/account/connection"
 	"github.com/dark-vinci/wapp/backend/sdk/constants"
 	"github.com/dark-vinci/wapp/backend/sdk/models/account"
 	"github.com/dark-vinci/wapp/backend/sdk/sdkerror"
@@ -24,7 +23,7 @@ type LastSeenDatabase interface {
 	Create(ctx context.Context, lastSeen account.LastSeen) (*account.LastSeen, error)
 }
 
-func NewLastSeen(conn *connection.DBConn) *LastSeenDatabase {
+func NewLastSeen(conn *Store) *LastSeenDatabase {
 	logger := conn.Log.With().Str(constants.PackageStrHelper, packageName).Logger()
 
 	lastSeen := &LastSeen{

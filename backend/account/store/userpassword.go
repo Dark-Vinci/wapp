@@ -9,7 +9,6 @@ import (
 	"github.com/rs/zerolog"
 	"gorm.io/gorm"
 
-	"github.com/dark-vinci/wapp/backend/account/connection"
 	"github.com/dark-vinci/wapp/backend/sdk/constants"
 	"github.com/dark-vinci/wapp/backend/sdk/models/account"
 	"github.com/dark-vinci/wapp/backend/sdk/sdkerror"
@@ -28,7 +27,7 @@ type UserPasswordDatabase interface {
 	GetUserPassword(ctx context.Context, userID uuid.UUID) ([]account.UserPasswords, error)
 }
 
-func NewUserPassword(conn *connection.DBConn) *UserPasswordDatabase {
+func NewUserPassword(conn *Store) *UserPasswordDatabase {
 	logger := conn.Log.With().
 		Str(constants.FunctionNameHelper, "NewUserPassword").
 		Str(constants.PackageStrHelper, packageName).Logger()

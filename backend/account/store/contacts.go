@@ -9,7 +9,6 @@ import (
 	"github.com/rs/zerolog"
 	"gorm.io/gorm"
 
-	"github.com/dark-vinci/wapp/backend/account/connection"
 	"github.com/dark-vinci/wapp/backend/sdk/constants"
 	"github.com/dark-vinci/wapp/backend/sdk/models/account"
 	"github.com/dark-vinci/wapp/backend/sdk/sdkerror"
@@ -34,7 +33,7 @@ type ContactDatabase interface {
 	DeleteAllUserContacts(ctx context.Context, userID uuid.UUID, deletedAt time.Time, tx *gorm.DB) error
 }
 
-func NewContact(conn *connection.DBConn) *ContactDatabase {
+func NewContact(conn *Store) *ContactDatabase {
 	l := conn.Log.With().
 		Str(constants.FunctionNameHelper, "NewContact").
 		Str(constants.PackageStrHelper, packageName).

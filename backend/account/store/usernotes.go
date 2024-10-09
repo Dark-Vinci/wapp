@@ -9,7 +9,6 @@ import (
 	"github.com/rs/zerolog"
 	"gorm.io/gorm"
 
-	"github.com/dark-vinci/wapp/backend/account/connection"
 	"github.com/dark-vinci/wapp/backend/sdk/constants"
 	"github.com/dark-vinci/wapp/backend/sdk/models/account"
 	"github.com/dark-vinci/wapp/backend/sdk/sdkerror"
@@ -28,7 +27,7 @@ type UserNoteDatabase interface {
 	Delete(ctx context.Context, deletedAt time.Time, userID, noteID uuid.UUID) error
 }
 
-func NewUserNote(conn *connection.DBConn) *UserNoteDatabase {
+func NewUserNote(conn *Store) *UserNoteDatabase {
 	logger := conn.Log.With().
 		Str(constants.FunctionNameHelper, "NewUserNote").
 		Str(constants.PackageStrHelper, packageName).

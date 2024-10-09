@@ -9,7 +9,6 @@ import (
 	"github.com/rs/zerolog"
 	"gorm.io/gorm"
 
-	"github.com/dark-vinci/wapp/backend/account/connection"
 	"github.com/dark-vinci/wapp/backend/sdk/constants"
 	"github.com/dark-vinci/wapp/backend/sdk/models/account"
 	"github.com/dark-vinci/wapp/backend/sdk/sdkerror"
@@ -30,7 +29,7 @@ type GroupUserDatabase interface {
 	FindUserByID(ctx context.Context, userID, groupID uuid.UUID) (*account.GroupUser, error)
 }
 
-func NewGroupUser(conn *connection.DBConn) *GroupUserDatabase {
+func NewGroupUser(conn *Store) *GroupUserDatabase {
 	logger := conn.Log.With().
 		Str(constants.FunctionNameHelper, "NewGroupUserStore").
 		Str(constants.PackageStrHelper, packageName).

@@ -1,0 +1,9 @@
+@mixin ZeroSpace() {
+    margin: 0;
+    padding: 0;
+}
+
+@mixin Screen($w: 100%, $h: 100%) {
+    min-width: $w;
+    height: $h;
+}

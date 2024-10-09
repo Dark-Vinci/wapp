@@ -26,3 +26,15 @@ func (a *App) Login(ctx context.Context, details LoginRequest) (*account.User, e
 	// get user and
 	return nil, nil
 }
+
+func (a *App) Logout(ctx context.Context) error {
+	return nil
+}
+
+func (a *App) Register(ctx context.Context, details LoginRequest) (*account.User, error) {
+	return nil, nil
+}
+
+func (a *App) VerifyOTP(ctx context.Context, otp string) error {
+	return nil
+}
