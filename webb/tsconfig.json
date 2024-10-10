@@ -40,7 +40,7 @@
     "allowUnreachableCode": false,
     "skipLibCheck": true,
     "paths": {
-      "@component": ["./component"],
+      "@components": ["./components"],
       "@containers": ["./containers"],
       "@pages": ["./pages"],
       "@startup": ["./startup"],
@@ -60,6 +60,6 @@
     "acceptance-tests",
     "webpack",
     "jest",
-    "src/setupTests.ts"
+    "src/startup/setupTests.ts"
   ],
 }

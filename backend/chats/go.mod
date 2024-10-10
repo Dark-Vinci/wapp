@@ -9,7 +9,7 @@ require (
 	github.com/pressly/goose/v3 v3.21.1
 	github.com/rs/zerolog v1.33.0
 	gorm.io/driver/postgres v1.5.9
-	gorm.io/gorm v1.25.11
+	gorm.io/gorm v1.25.12
 	gorm.io/plugin/dbresolver v1.5.2
 )
 

@@ -30,7 +30,10 @@ type GroupDatabase interface {
 }
 
 func NewGroup(conn *Store) *GroupDatabase {
-	l := conn.Log.With().Str(constants.FunctionNameHelper, "NewGroup").Logger()
+	l := conn.Log.With().
+		Str(constants.FunctionNameHelper, "NewGroup").
+		Str(constants.PackageStrHelper, packageName).
+		Logger()
 
 	group := &Group{
 		logger: &l,
