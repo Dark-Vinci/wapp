@@ -110,19 +110,22 @@ func New(z *zerolog.Logger, e *env.Environment) Operations {
 		db.Close()
 	}()
 
-	//launch reader to start consuming data immediately
-	go func() {
-		ch := make(chan k.Message)
+	defer func() {
+		go func() {
+			ch := make(chan k.Message)
 
-		app.kafkaReader.Fetch(context.Background(), ch)
+			app.kafkaReader.Fetch(context.Background(), ch)
 
-		for msg := range ch {
-			go func() {
-				//process message
-				fmt.Println(msg)
-			}()
-		}
+			for msg := range ch {
+				go func() {
+					//process message
+					fmt.Println(msg)
+				}()
+			}
+		}()
 	}()
+
+	//launch reader to start consuming data immediately
 
 	logger.Info().Msg("application successfully initialized")
 
