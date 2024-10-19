@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"syscall"
+	"time"
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/rs/zerolog"
@@ -20,10 +21,13 @@ import (
 	"github.com/dark-vinci/wapp/backend/account/app"
 	"github.com/dark-vinci/wapp/backend/account/env"
 	"github.com/dark-vinci/wapp/backend/account/server"
+	"github.com/dark-vinci/wapp/backend/account/store"
 	"github.com/dark-vinci/wapp/backend/sdk/constants"
 	"github.com/dark-vinci/wapp/backend/sdk/grpc/account"
 	"github.com/dark-vinci/wapp/backend/sdk/utils"
 	"github.com/dark-vinci/wapp/backend/sdk/utils/clickhouse"
+	"github.com/dark-vinci/wapp/backend/sdk/utils/kafka"
+	"github.com/dark-vinci/wapp/backend/sdk/utils/redis"
 )
 
 const AppName = "account.main"
@@ -72,7 +76,17 @@ func main() {
 		}
 	}
 
-	a := app.New(&logger, e)
+	red := redis.NewRedis(&logger, "", "", "")
+	db := store.NewStore(logger, e)
+	kafkaReader := kafka.NewReader([]string{}, "", "", "")
+	kafkaWriter := kafka.NewWriter("", "")
+
+	a := app.New(&logger, e, db, *kafkaReader, *kafkaWriter, *red)
+
+	//	close all{redis, db, kafka} connection
+	defer func() {
+		a.Shutdown()
+	}()
 
 	// grpc server initialize
 	grpcServer := grpc.NewServer()
@@ -95,6 +109,10 @@ func main() {
 	go func() {
 		if err = grpcServer.Serve(listener); err != nil {
 			appLogger.Fatal().Err(err).Msg("grpcServer failed to serve")
+		} else {
+			// sleep for 1 minute and start consuming from kafka when the application starts
+			time.Sleep(60 * time.Second)
+			a.Consume()
 		}
 	}()
 

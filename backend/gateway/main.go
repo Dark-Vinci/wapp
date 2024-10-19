@@ -44,6 +44,10 @@ func main() {
 		}
 	}()
 
+	//kafka
+	//db
+	//redis
+
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 
 	<-ctx.Done()

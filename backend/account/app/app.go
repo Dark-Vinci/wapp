@@ -2,12 +2,9 @@ package app
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/google/uuid"
 	"github.com/rs/zerolog"
-	k "github.com/segmentio/kafka-go"
-	"gorm.io/gorm"
 
 	"github.com/dark-vinci/wapp/backend/account/env"
 	"github.com/dark-vinci/wapp/backend/account/store"
@@ -44,13 +41,16 @@ type Operations interface {
 	AddUser(ctx context.Context, groupID, userID uuid.UUID) error
 	RemoveUserFromGroup(ctx context.Context, groupID, userID uuid.UUID) error
 	AddUserToChannel(ctx context.Context, userID, channelID uuid.UUID) error
+
+	Shutdown()
+	Consume()
 }
 
 type App struct {
 	env               *env.Environment
 	red               redis.Operations
 	logger            zerolog.Logger
-	dbConnection      *gorm.DB
+	dbConnection      *store.Store
 	userStore         store.UserDatabase
 	groupStore        store.GroupDatabase
 	channelStore      store.ChannelDatabase
@@ -65,13 +65,19 @@ type App struct {
 	kafkaWriter       kafka.Writer
 }
 
-func New(z *zerolog.Logger, e *env.Environment) Operations {
-	logger := z.With().Str(constants.PackageStrHelper, packageName).Logger()
+func (a *App) Shutdown() {
+	_ = a.kafkaReader.Close()
+	_ = a.kafkaWriter.Close()
+	_ = a.red.Close()
+	a.dbConnection.Close()
+}
 
-	red := redis.NewRedis(z, "", "", "")
-	db := store.NewStore(*z, e)
-	kafkaReader := kafka.NewReader([]string{}, "", "", "")
-	kafkaWriter := kafka.NewWriter("", "")
+func (a *App) Consume() {
+
+}
+
+func New(z *zerolog.Logger, e *env.Environment, db *store.Store, kr kafka.Reader, kw kafka.Writer, red redis.Operations) Operations {
+	logger := z.With().Str(constants.PackageStrHelper, packageName).Logger()
 
 	userStore := store.NewUser(db)
 	groupStore := store.NewGroup(db)
@@ -85,7 +91,7 @@ func New(z *zerolog.Logger, e *env.Environment) Operations {
 	lastSeenStore := store.NewLastSeen(db)
 
 	app := &App{
-		red:               *red,
+		red:               red,
 		env:               e,
 		logger:            logger,
 		userStore:         *userStore,
@@ -98,34 +104,10 @@ func New(z *zerolog.Logger, e *env.Environment) Operations {
 		userNoteStore:     *userNoteStore,
 		userPasswordStore: *userPasswordStore,
 		lastSeen:          *lastSeenStore,
-		dbConnection:      db.Connection,
-		kafkaReader:       *kafkaReader,
-		kafkaWriter:       *kafkaWriter,
+		dbConnection:      db,
+		kafkaReader:       kr,
+		kafkaWriter:       kw,
 	}
-
-	defer func() {
-		_ = app.kafkaReader.Close()
-		_ = app.kafkaWriter.Close()
-		_ = app.red.Close()
-		db.Close()
-	}()
-
-	defer func() {
-		go func() {
-			ch := make(chan k.Message)
-
-			app.kafkaReader.Fetch(context.Background(), ch)
-
-			for msg := range ch {
-				go func() {
-					//process message
-					fmt.Println(msg)
-				}()
-			}
-		}()
-	}()
-
-	//launch reader to start consuming data immediately
 
 	logger.Info().Msg("application successfully initialized")
 
