@@ -37,7 +37,7 @@ func (a *App) DeleteUserAccount(ctx context.Context, userID uuid.UUID) error {
 
 	log.Info().Msg("Got request to delete user account")
 
-	err := a.dbConnection.Transaction(func(tx *gorm.DB) error {
+	err := a.dbConnection.Connection.Transaction(func(tx *gorm.DB) error {
 		log.Info().Msg("Transaction: starting transaction to delete user account")
 
 		//	delete all user channel

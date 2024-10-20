@@ -1,3 +1,5 @@
+import { JSX } from "react";
+
 import style from "./login.module.scss";
 
 export function Login(): JSX.Element {

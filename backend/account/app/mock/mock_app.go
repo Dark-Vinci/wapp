@@ -13,6 +13,7 @@ import (
 	context "context"
 	reflect "reflect"
 
+	app "github.com/dark-vinci/wapp/backend/account/app"
 	models "github.com/dark-vinci/wapp/backend/sdk/models"
 	account "github.com/dark-vinci/wapp/backend/sdk/models/account"
 	uuid "github.com/google/uuid"
@@ -56,6 +57,20 @@ func (mr *MockOperationsMockRecorder) AddUser(ctx, groupID, userID any) *gomock.
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddUser", reflect.TypeOf((*MockOperations)(nil).AddUser), ctx, groupID, userID)
 }
 
+// AddUserToChannel mocks base method.
+func (m *MockOperations) AddUserToChannel(ctx context.Context, userID, channelID uuid.UUID) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "AddUserToChannel", ctx, userID, channelID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// AddUserToChannel indicates an expected call of AddUserToChannel.
+func (mr *MockOperationsMockRecorder) AddUserToChannel(ctx, userID, channelID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddUserToChannel", reflect.TypeOf((*MockOperations)(nil).AddUserToChannel), ctx, userID, channelID)
+}
+
 // BlockContact mocks base method.
 func (m *MockOperations) BlockContact(ctx context.Context, userID, contactID uuid.UUID) error {
 	m.ctrl.T.Helper()
@@ -68,6 +83,18 @@ func (m *MockOperations) BlockContact(ctx context.Context, userID, contactID uui
 func (mr *MockOperationsMockRecorder) BlockContact(ctx, userID, contactID any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BlockContact", reflect.TypeOf((*MockOperations)(nil).BlockContact), ctx, userID, contactID)
+}
+
+// Consume mocks base method.
+func (m *MockOperations) Consume() {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "Consume")
+}
+
+// Consume indicates an expected call of Consume.
+func (mr *MockOperationsMockRecorder) Consume() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Consume", reflect.TypeOf((*MockOperations)(nil).Consume))
 }
 
 // CreateChannel mocks base method.
@@ -216,18 +243,32 @@ func (mr *MockOperationsMockRecorder) GetUserContacts(ctx, contactID any) *gomoc
 }
 
 // Login mocks base method.
-func (m *MockOperations) Login(ctx context.Context, userID uuid.UUID) (*models.User, error) {
+func (m *MockOperations) Login(ctx context.Context, details app.LoginRequest) (*account.User, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Login", ctx, userID)
-	ret0, _ := ret[0].(*models.User)
+	ret := m.ctrl.Call(m, "Login", ctx, details)
+	ret0, _ := ret[0].(*account.User)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Login indicates an expected call of Login.
-func (mr *MockOperationsMockRecorder) Login(ctx, userID any) *gomock.Call {
+func (mr *MockOperationsMockRecorder) Login(ctx, details any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Login", reflect.TypeOf((*MockOperations)(nil).Login), ctx, userID)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Login", reflect.TypeOf((*MockOperations)(nil).Login), ctx, details)
+}
+
+// Logout mocks base method.
+func (m *MockOperations) Logout(ctx context.Context) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Logout", ctx)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Logout indicates an expected call of Logout.
+func (mr *MockOperationsMockRecorder) Logout(ctx any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Logout", reflect.TypeOf((*MockOperations)(nil).Logout), ctx)
 }
 
 // MakeContactFavourite mocks base method.
@@ -258,6 +299,21 @@ func (mr *MockOperationsMockRecorder) Ping(ctx, message any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Ping", reflect.TypeOf((*MockOperations)(nil).Ping), ctx, message)
 }
 
+// Register mocks base method.
+func (m *MockOperations) Register(ctx context.Context, details app.LoginRequest) (*account.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Register", ctx, details)
+	ret0, _ := ret[0].(*account.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Register indicates an expected call of Register.
+func (mr *MockOperationsMockRecorder) Register(ctx, details any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Register", reflect.TypeOf((*MockOperations)(nil).Register), ctx, details)
+}
+
 // RemoveFavouriteContact mocks base method.
 func (m *MockOperations) RemoveFavouriteContact(ctx context.Context, contactID, userID uuid.UUID) error {
 	m.ctrl.T.Helper()
@@ -272,18 +328,30 @@ func (mr *MockOperationsMockRecorder) RemoveFavouriteContact(ctx, contactID, use
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemoveFavouriteContact", reflect.TypeOf((*MockOperations)(nil).RemoveFavouriteContact), ctx, contactID, userID)
 }
 
-// RemoveUserGroup mocks base method.
-func (m *MockOperations) RemoveUserGroup(ctx context.Context, groupID, userID uuid.UUID) error {
+// RemoveUserFromGroup mocks base method.
+func (m *MockOperations) RemoveUserFromGroup(ctx context.Context, groupID, userID uuid.UUID) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "RemoveUserGroup", ctx, groupID, userID)
+	ret := m.ctrl.Call(m, "RemoveUserFromGroup", ctx, groupID, userID)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
-// RemoveUserGroup indicates an expected call of RemoveUserGroup.
-func (mr *MockOperationsMockRecorder) RemoveUserGroup(ctx, groupID, userID any) *gomock.Call {
+// RemoveUserFromGroup indicates an expected call of RemoveUserFromGroup.
+func (mr *MockOperationsMockRecorder) RemoveUserFromGroup(ctx, groupID, userID any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemoveUserGroup", reflect.TypeOf((*MockOperations)(nil).RemoveUserGroup), ctx, groupID, userID)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemoveUserFromGroup", reflect.TypeOf((*MockOperations)(nil).RemoveUserFromGroup), ctx, groupID, userID)
+}
+
+// Shutdown mocks base method.
+func (m *MockOperations) Shutdown() {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "Shutdown")
+}
+
+// Shutdown indicates an expected call of Shutdown.
+func (mr *MockOperationsMockRecorder) Shutdown() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Shutdown", reflect.TypeOf((*MockOperations)(nil).Shutdown))
 }
 
 // UnblockContact mocks base method.
@@ -298,4 +366,18 @@ func (m *MockOperations) UnblockContact(ctx context.Context, userID, contactID u
 func (mr *MockOperationsMockRecorder) UnblockContact(ctx, userID, contactID any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UnblockContact", reflect.TypeOf((*MockOperations)(nil).UnblockContact), ctx, userID, contactID)
+}
+
+// VerifyOTP mocks base method.
+func (m *MockOperations) VerifyOTP(ctx context.Context, otp string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "VerifyOTP", ctx, otp)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// VerifyOTP indicates an expected call of VerifyOTP.
+func (mr *MockOperationsMockRecorder) VerifyOTP(ctx, otp any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "VerifyOTP", reflect.TypeOf((*MockOperations)(nil).VerifyOTP), ctx, otp)
 }

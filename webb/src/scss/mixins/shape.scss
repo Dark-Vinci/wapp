@@ -1,4 +1,4 @@
-@mixin Reactangle($w: 100%, $h: 100%) {
+@mixin Rectangle($w: 100%, $h: 100%) {
     width: $w;
     height: $h;
 }

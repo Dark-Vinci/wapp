@@ -1,3 +1,5 @@
+import { JSX } from "react";
+
 import style from "./welcome.module.scss";
 
 export function Welcome(): JSX.Element {

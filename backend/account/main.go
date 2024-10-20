@@ -39,10 +39,9 @@ func main() {
 
 	//connect to clickhouse for logs and analytics
 	click := clickhouse.New(e.ClickHouseDatabase, e.ClickHouseUsername, e.ClickHousePassword)
+	file, _ := os.Open("./logger.text")
 
-	defer click.Close()
-
-	logger := zerolog.New(zerolog.MultiLevelWriter(click, zerolog.ConsoleWriter{Out: os.Stdout})).
+	logger := zerolog.New(zerolog.MultiLevelWriter(file, click, zerolog.ConsoleWriter{Out: os.Stdout})).
 		With().
 		Timestamp().
 		Logger()
@@ -83,11 +82,6 @@ func main() {
 
 	a := app.New(&logger, e, db, *kafkaReader, *kafkaWriter, *red)
 
-	//	close all{redis, db, kafka} connection
-	defer func() {
-		a.Shutdown()
-	}()
-
 	// grpc server initialize
 	grpcServer := grpc.NewServer()
 	account.RegisterAccountServer(grpcServer, server.New(e, appLogger, a, tracer))
@@ -101,7 +95,11 @@ func main() {
 	appLogger.Info().Msgf("app network is up listening on port %s", e.AppPort)
 
 	defer func() {
-		_ = listener.Close()
+		//	close all{redis, db, kafka, server} connection
+		click.Close()
+		file.Close()
+		a.Shutdown()
+		listener.Close()
 	}()
 
 	appLogger.Info().Msg("serving service over GRPC....")
