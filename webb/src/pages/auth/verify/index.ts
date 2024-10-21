@@ -1,1 +1,1 @@
-export * from './Verify';
+export * from "./Verify";

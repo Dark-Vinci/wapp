@@ -1,3 +1,4 @@
 export enum Auth {
   LOGIN = "INITIATE_LOGIN",
+  INITIATE_VERIFY_OTP = "INITIATE_VERIFY_OTP",
 }
