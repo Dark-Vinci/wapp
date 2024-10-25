@@ -97,9 +97,9 @@ func main() {
 	defer func() {
 		//	close all{redis, db, kafka, server} connection
 		click.Close()
-		file.Close()
+		_ = file.Close()
 		a.Shutdown()
-		listener.Close()
+		_ = listener.Close()
 	}()
 
 	appLogger.Info().Msg("serving service over GRPC....")
