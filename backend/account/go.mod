@@ -6,7 +6,7 @@ go 1.22.1
 
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.2
-	                                                                                                                                      github.com/dark-vinci/wapp/backend/sdk v0.0.0
+	github.com/dark-vinci/wapp/backend/sdk v0.0.0
 	github.com/google/uuid v1.6.0
 	github.com/pressly/goose/v3 v3.21.1
 	github.com/prometheus/client_golang v1.20.1

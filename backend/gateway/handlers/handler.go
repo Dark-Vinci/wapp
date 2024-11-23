@@ -4,38 +4,43 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	socket "github.com/googollee/go-socket.io"
+	//socket "github.com/googollee/go-socket.io"
 	"github.com/rs/zerolog"
 
 	"github.com/dark-vinci/wapp/backend/gateway/app"
 	"github.com/dark-vinci/wapp/backend/gateway/env"
 	"github.com/dark-vinci/wapp/backend/gateway/handlers/api"
-	appSocket "github.com/dark-vinci/wapp/backend/gateway/handlers/socket"
+	"github.com/dark-vinci/wapp/backend/gateway/handlers/websocket"
+	"github.com/dark-vinci/wapp/backend/gateway/middleware"
 )
 
 const packageName = "gateway.handlers"
 
 type Handler struct {
-	log          *zerolog.Logger
-	env          *env.Environment
-	app          *app.Operations
-	socketServer *socket.Server
-	middleware   *string
-	engine       *gin.Engine
+	log *zerolog.Logger
+	env *env.Environment
+	app *app.Operations
+	//socketServer *socket.Server
+	middleware *middleware.Middleware
+	engine     *gin.Engine
 }
 
-func New(e *env.Environment, logger zerolog.Logger) *Handler {
+func New(e *env.Environment, log zerolog.Logger) *Handler {
 	a := app.New()
-	s := appSocket.Server(e, logger)
+	//s := appSocket.Server(e, log)
 
 	r := gin.Default()
+	mw := middleware.New(log, e, a)
+
+	logger := log.With().Str("PACKAGE", packageName).Logger()
 
 	return &Handler{
-		env:          e,
-		log:          &logger,
-		app:          &a,
-		socketServer: s,
-		engine:       r,
+		env: e,
+		log: &logger,
+		app: &a,
+		//socketServer: s,
+		engine:     r,
+		middleware: mw,
 	}
 }
 
@@ -46,10 +51,12 @@ func (h *Handler) GetEngine() *gin.Engine {
 func (h *Handler) Build() {
 	gin.ForceConsoleColor()
 
-	h.engine.Use(ginMiddleware(h.env.FrontEndURL))
+	// cors middleware
+	h.engine.Use(h.middleware.Cors())
 
 	apiGroup := h.engine.Group("/api")
 
+	// add no middleware
 	apiGroup.GET("/ping", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{
 			"name":     "tomato",
@@ -57,35 +64,10 @@ func (h *Handler) Build() {
 		})
 	})
 
+	// logged-in and non
 	api.New(apiGroup)
 
-	//socket IO
-	h.engine.GET("/socket.io/*any", authentication, gin.WrapH(h.socketServer))
-	h.engine.POST("/socket.io/*any", authentication, gin.WrapH(h.socketServer))
-	h.engine.StaticFS("/public", http.Dir("../asset"))
-}
-
-func authentication(ctx *gin.Context) {
-	ctx.JSON(http.StatusOK, gin.H{
-		"name":     "tomato",
-		"response": "200",
-	})
-}
-
-func ginMiddleware(allowOrigin string) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.Writer.Header().Set("Access-Control-Allow-Origin", allowOrigin)
-		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
-		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE")
-		c.Writer.Header().Set("Access-Control-Allow-Headers", "Accept, Authorization, Content-Type, Content-Length, X-CSRF-Token, Token, session, Origin, Host, Connection, Accept-Encoding, Accept-Language, X-Requested-With")
-
-		if c.Request.Method == http.MethodOptions {
-			c.AbortWithStatus(http.StatusNoContent)
-			return
-		}
-
-		c.Request.Header.Del("Origin")
-
-		c.Next()
-	}
+	// user must be logged in
+	ws := websocket.New(*h.log, h.env)
+	ws.Build(h.engine.Group("/socket"))
 }
