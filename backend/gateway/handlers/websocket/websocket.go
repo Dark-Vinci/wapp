@@ -18,11 +18,11 @@ type WebSocket struct {
 	logger  zerolog.Logger
 }
 
-func New(log zerolog.Logger, e *env.Environment) *WebSocket {
+func New(log zerolog.Logger, e *env.Environment, r *gin.RouterGroup) {
 	logger := log.With().Str("packageName", packageName).Logger()
 	hub := NewHub(log, e)
 
-	return &WebSocket{
+	ww := WebSocket{
 		upgrade: websocket.Upgrader{
 			ReadBufferSize:  1024,
 			WriteBufferSize: 1024,
@@ -30,6 +30,8 @@ func New(log zerolog.Logger, e *env.Environment) *WebSocket {
 		Hub:    hub,
 		logger: logger,
 	}
+
+	ww.Build(r)
 }
 
 func (ws *WebSocket) Build(endpoint *gin.RouterGroup) {

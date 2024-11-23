@@ -10,11 +10,9 @@ import (
 
 	"github.com/dark-vinci/wapp/backend/sdk/constants"
 	"github.com/dark-vinci/wapp/backend/sdk/utils/redis"
-	//"github.com/dark-vinci/wapp/backend/sdk/utils/redis"
 )
 
 type Hub struct {
-	// use redis instead of a map
 	redis      redis.Operations
 	Clients    map[*Client]struct{}
 	Broadcast  chan []byte
@@ -47,10 +45,11 @@ func (h *Hub) Start() {
 				var c Message
 
 				if err := json.Unmarshal(msg, &c); err != nil {
+					h.logger.Err(err).Msg("Error unmarshalling message")
 				}
 
 				// ignore message sent by the same server
-				if c.Server != h.ServerName {
+				if c.Server != h.ServerName && len(c.Server) != 0 {
 					h.Broadcast <- msg
 				}
 			}
