@@ -38,10 +38,6 @@ func New(e *env.Environment, log zerolog.Logger) *Handler {
 	}
 }
 
-func (h *Handler) GetEngine() *gin.Engine {
-	return h.engine
-}
-
 func (h *Handler) Build() {
 	gin.ForceConsoleColor()
 
@@ -52,4 +48,8 @@ func (h *Handler) Build() {
 
 	// build endpoints for websocket
 	websocket.New(*h.log, h.env, h.engine.Group("/socket"))
+}
+
+func (h *Handler) GetEngine() *gin.Engine {
+	return h.engine
 }

@@ -2,7 +2,6 @@ package websocket
 
 import (
 	"github.com/dark-vinci/wapp/backend/gateway/env"
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -12,17 +11,11 @@ import (
 
 const packageName = "handler.websocket"
 
-type WebSocket struct {
-	upgrade websocket.Upgrader
-	Hub     *Hub
-	logger  zerolog.Logger
-}
-
 func New(log zerolog.Logger, e *env.Environment, r *gin.RouterGroup) {
 	logger := log.With().Str("packageName", packageName).Logger()
 	hub := NewHub(log, e)
 
-	ww := WebSocket{
+	ws := WebSocket{
 		upgrade: websocket.Upgrader{
 			ReadBufferSize:  1024,
 			WriteBufferSize: 1024,
@@ -31,7 +24,13 @@ func New(log zerolog.Logger, e *env.Environment, r *gin.RouterGroup) {
 		logger: logger,
 	}
 
-	ww.Build(r)
+	ws.Build(r)
+}
+
+type WebSocket struct {
+	upgrade websocket.Upgrader
+	Hub     *Hub
+	logger  zerolog.Logger
 }
 
 func (ws *WebSocket) Build(endpoint *gin.RouterGroup) {
@@ -46,8 +45,8 @@ func (ws *WebSocket) Build(endpoint *gin.RouterGroup) {
 func (ws *WebSocket) serveWs(hub *Hub, w http.ResponseWriter, r *http.Request) {
 	conn, err := ws.upgrade.Upgrade(w, r, nil)
 	if err != nil {
-		// todo: return an error
-		log.Println(err)
+		ws.logger.Err(err).Msgf("error upgrading ws: %v", err)
+		return
 	}
 
 	client := NewClient(hub, conn, ws.logger)
