@@ -26,7 +26,7 @@ type BlurDatabase interface {
 	Delete(ctx context.Context, id uuid.UUID) error
 }
 
-func NewBlur(logger zerolog.Logger) BlurDatabase {
+func NewBlur(logger zerolog.Logger, db *gorm.DB) BlurDatabase {
 	return &Blur{}
 }
 

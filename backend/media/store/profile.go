@@ -29,7 +29,7 @@ type ProfileDatabase interface {
 	DeleteOthers(ctx context.Context, accountID uuid.UUID) error
 }
 
-func NewProfile(logger zerolog.Logger) ProfileDatabase {
+func NewProfile(logger zerolog.Logger, db *gorm.DB) ProfileDatabase {
 	return &Profile{}
 }
 

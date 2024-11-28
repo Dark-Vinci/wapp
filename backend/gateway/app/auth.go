@@ -6,5 +6,5 @@ import (
 )
 
 func (a *App) LoginToAccount(ctx context.Context, req model.LoginRequest) (string, error) {
-
+	return "", nil
 }

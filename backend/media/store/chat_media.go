@@ -26,7 +26,7 @@ type ChatMediaDatabase interface {
 	Delete(ctx context.Context, id uuid.UUID) error
 }
 
-func NewChatMedia(logger zerolog.Logger) ChatMediaDatabase {
+func NewChatMedia(logger zerolog.Logger, db *gorm.DB) ChatMediaDatabase {
 	return &ChatMedia{}
 }
 
