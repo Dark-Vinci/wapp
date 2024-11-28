@@ -8,4 +8,6 @@ import "account/response.proto";
 
 service Account {
   rpc Ping(PingRequest) returns (PingResponse) {}
+  rpc CreateUserAccount(CreateUserRequest) returns (CreateUserResponse) {}
+  rpc Login(LoginRequest) returns (LoginResponse) {}
 }

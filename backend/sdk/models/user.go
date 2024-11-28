@@ -1,9 +1,12 @@
 package models
 
 import (
+	"gorm.io/gorm"
 	"time"
 
 	"github.com/google/uuid"
+
+	"github.com/dark-vinci/wapp/backend/sdk/utils/crypto"
 )
 
 type User struct {
@@ -14,13 +17,21 @@ type User struct {
 
 	Email       string
 	PhoneNumber string
-	Password    *string
+	Password    string
 
 	About string
 
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt *time.Time
+}
+
+func (u *User) BeforeCreate(_ *gorm.DB) (err error) {
+	c := crypto.Crypto{Cost: 10}
+	hash, err := c.HashPassword(u.Password)
+
+	u.Password = hash
+	return
 }
 
 type Group struct {

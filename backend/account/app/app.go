@@ -20,13 +20,13 @@ const packageName string = "account.app"
 //go:generate mockgen -source app.go -destination ./mock/mock_app.go -package mock  Operations
 type Operations interface {
 	Logout(ctx context.Context) error
-	Register(ctx context.Context, details LoginRequest) (*account.User, error)
+	//Register(ctx context.Context, details LoginRequest) (*account.User, error)
 	VerifyOTP(ctx context.Context, otp string) error
 	DeleteUserAccount(ctx context.Context, userID uuid.UUID) error
 	CreateUser(ctx context.Context, user models.User) (*models.User, error)
 	CreateGroup(ctx context.Context, group account.Group) error
 	DeleteGroup(ctx context.Context, groupID uuid.UUID) error
-	Login(ctx context.Context, details LoginRequest) (*account.User, error)
+	LoginToAccount(ctx context.Context, username, password string) error
 	CreateContact(ctx context.Context, contact account.Contacts) (*account.Contacts, error)
 	BlockContact(ctx context.Context, userID, contactID uuid.UUID) error
 	UnblockContact(ctx context.Context, userID, contactID uuid.UUID) error

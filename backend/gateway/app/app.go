@@ -17,8 +17,7 @@ type Operations interface {
 	Ping() string
 	CreateUser() string
 
-	//media
-
+	LoginToAccount(ctx context.Context, req model.LoginRequest) (string, error)
 	UploadSingleMedia(ctx context.Context, userID uuid.UUID, file *multipart.FileHeader) (*model.FileContent, error)
 	UploadMultipleMedia(ctx context.Context, files []*multipart.FileHeader) ([]model.FileContent, error)
 }

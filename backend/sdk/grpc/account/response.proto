@@ -6,3 +6,17 @@ option go_package = "github.com/dark-vinci/wapp/backend/sdk/grpc/account";
 message PingResponse {
   string data = 1;
 }
+
+message CreateUserResponse {
+  string request_id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  string phone_number = 4;
+  string email = 5;
+  string id = 6;
+}
+
+message LoginResponse {
+  string request_id = 1;
+  bool success = 2;
+}
