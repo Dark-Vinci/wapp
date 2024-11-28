@@ -6,12 +6,10 @@ import (
 	"github.com/google/uuid"
 )
 
-type PostMedia struct {
+type Blur struct {
 	ID        uuid.UUID
-	UserID    uuid.UUID
-	PostID    uuid.UUID
 	URL       string
-	Type      Type // AUDIO, VIDEO
+	MediaID   string
+	For       Media
 	CreatedAt time.Time
-	DeletedAt *time.Time
 }
