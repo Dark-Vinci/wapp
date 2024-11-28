@@ -1,9 +1,10 @@
 package chats
 
 import (
+	"github.com/gin-gonic/gin"
+
 	"github.com/dark-vinci/wapp/backend/gateway/env"
 	"github.com/dark-vinci/wapp/backend/gateway/middleware"
-	"github.com/gin-gonic/gin"
 )
 
 type chatApi struct {

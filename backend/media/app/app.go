@@ -15,8 +15,9 @@ import (
 const packageName = "media.app"
 
 type Operations interface {
-	GetUserProfile(ctx context.Context, userID uuid.UUID) (*media.Profile, error)
+	GetProfile(ctx context.Context, userID uuid.UUID) (*media.Profile, error)
 	CreateUserProfile(ctx context.Context, userID uuid.UUID, URL string) (*media.Profile, error)
+	CreateGroupProfile(ctx context.Context, entityID uuid.UUID, userID uuid.UUID, URL string) (*media.Profile, error)
 }
 
 type App struct {

@@ -11,14 +11,40 @@ import (
 	"github.com/dark-vinci/wapp/backend/sdk/utils"
 )
 
-func (a *App) GetUserProfile(ctx context.Context, userID uuid.UUID) (*media.Profile, error) {
+func (a *App) GetProfile(ctx context.Context, entityID uuid.UUID) (*media.Profile, error) {
 	logger := a.logger.With().
 		Str(constants.MethodStrHelper, "app.GetUserProfile").
 		Str(constants.RequestID, utils.GetRequestID(ctx)).Logger()
 
-	profile, err := a.profileStore.GetByID(ctx, userID)
+	profile, err := a.profileStore.GetByID(ctx, entityID)
 	if err != nil {
 		logger.Err(err).Msg("failed to delete user")
+		return nil, err
+	}
+
+	return profile, nil
+}
+
+func (a *App) CreateGroupProfile(ctx context.Context, entityID uuid.UUID, userID uuid.UUID, URL string) (*media.Profile, error) {
+	logger := a.logger.With().
+		Str(constants.MethodStrHelper, "app.CreateGroupProfile").
+		Str(constants.RequestID, utils.GetRequestID(ctx)).Logger()
+
+	if err := a.profileStore.DeleteOthers(ctx, entityID); err != nil {
+		logger.Err(err).Msg("failed to delete other entity group profile")
+		return nil, err
+	}
+
+	nProfile := media.Profile{
+		URL:       URL,
+		AccountID: entityID,
+		CreatedBy: userID,
+		CreatedAt: time.Now(),
+	}
+
+	profile, err := a.profileStore.Create(ctx, nProfile)
+	if err != nil {
+		logger.Err(err).Msg("failed to create group")
 		return nil, err
 	}
 

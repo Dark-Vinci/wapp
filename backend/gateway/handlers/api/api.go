@@ -1,12 +1,14 @@
 package api
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 
 	"github.com/dark-vinci/wapp/backend/gateway/handlers/api/account"
 	"github.com/dark-vinci/wapp/backend/gateway/handlers/api/auth"
 	"github.com/dark-vinci/wapp/backend/gateway/handlers/api/chats"
+	"github.com/dark-vinci/wapp/backend/gateway/handlers/api/media"
 	"github.com/dark-vinci/wapp/backend/gateway/handlers/api/posts"
 )
 
@@ -22,4 +24,5 @@ func Build(r *gin.RouterGroup) {
 	auth.New(r)
 	chats.New(r)
 	posts.New(r)
+	media.New(r)
 }

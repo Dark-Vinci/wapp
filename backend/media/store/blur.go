@@ -19,7 +19,7 @@ type Blur struct {
 	db     *gorm.DB
 }
 
-// go:genrate
+//go:generate mockgen -source blur.go -destination ./mock/blur_mock.go -package mock BlurDatabase
 type BlurDatabase interface {
 	Create(ctx context.Context, blur media.Blur) (*media.Blur, error)
 	GetByID(ctx context.Context, entityID uuid.UUID) (*media.Blur, error)
