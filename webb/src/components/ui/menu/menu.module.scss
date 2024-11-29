@@ -1,0 +1,17 @@
+div.container {
+  border: 2px solid green;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100px;
+
+  & > div.top {
+    border: 2px solid yellow;
+    flex: 1;
+  }
+
+  & > div.bottom {
+    border: 2px solid blue;
+    flex: 1;
+  }
+}

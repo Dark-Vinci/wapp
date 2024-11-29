@@ -1,0 +1,7 @@
+@import "../../../scss/mixins/util.scss";
+@import "../../../scss/mixins/shape.scss";
+
+div.container {
+  @include Debug();
+  @include Rectangle(20vw, 100vh);
+}
