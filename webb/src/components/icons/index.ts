@@ -7,3 +7,8 @@ export * from "./status/index";
 export * from "./check/index";
 export * from "./edit/index";
 export * from "./camera/index";
+export * from "./chatadd/index";
+export * from "./menu/index";
+export * from "./search/index";
+export * from "./backarrow";
+export * from "./clear";

@@ -11,3 +11,10 @@
 @mixin Debug($color: red) {
     border: 2px solid $color;
 }
+
+@mixin Flex($dir: row, $jus: center, $align: center) {
+    display: flex;
+    justify-content: $jus;
+    align-items: $align;
+    flex-direction: $dir;
+}

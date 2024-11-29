@@ -1,17 +1,29 @@
+@import "../../../scss/mixins/util.scss";
+
 div.container {
-  border: 2px solid green;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 100px;
+  @include Debug(blue);
+  @include Rectangle(64px, 100vw);
+  @include Flex(column, space-between, center);
 
   & > div.top {
-    border: 2px solid yellow;
-    flex: 1;
+    flex: 80%;
+    @include Debug(green);
+    @include Rectangle(100%, 100%);
+    @include Flex(column, start, start);
+
+    & > div {
+      @include Square(40px);
+      @include Debug(yellow);
+    }
   }
 
   & > div.bottom {
-    border: 2px solid blue;
-    flex: 1;
+    @include Debug(aqua);
+    @include Flex(column, center, center);
+
+    & > div {
+      @include Square(40px);
+      @include Debug(pink);
+    }
   }
 }

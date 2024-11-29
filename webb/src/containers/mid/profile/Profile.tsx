@@ -1,7 +1,6 @@
 import { ChangeEventHandler, JSX } from "react";
 
 import { CameraIcon, CheckIcon, EditIcon } from "@/components/icons";
-
 import style from "./Profile.module.scss";
 
 interface ProfileProps {
@@ -95,7 +94,7 @@ export function Profile({
       </div>
 
       <div className={style.profile_image}>
-        // add the pop list somewhere
+        {/* // add the pop list somewhere */}
         <img src={profileURL} alt="profile image" />
         <div className={style.overlay}>
           <div></div>

@@ -18,31 +18,27 @@ export function Menu({ profileURL }: MenuProps): JSX.Element {
   return (
     <div className={style.container}>
       <div className={style.top}>
-        <div className="top_container">
-          <div>
-            <ChatIcon unreadMessageCount={10} lightMode={true} active={false} />
-          </div>
-          <div>
-            <StatusIcon />
-          </div>
+        <div>
+          <ChatIcon />
+        </div>
+        <div>
+          <StatusIcon />
+        </div>
 
-          <div>
-            <ChannelIcon />
-          </div>
-          <div>
-            <AiIcon />
-          </div>
+        <div>
+          <ChannelIcon />
+        </div>
+        <div>
+          <AiIcon />
         </div>
       </div>
 
       <div className={style.bottom}>
-        <div className="bot_container">
-          <div>
-            <SettingsIcon />
-          </div>
-          <div>
-            <img src={profileURL} alt="profile image" />
-          </div>
+        <div>
+          <SettingsIcon />
+        </div>
+        <div>
+          <img src={profileURL} alt="profile image" />
         </div>
       </div>
     </div>

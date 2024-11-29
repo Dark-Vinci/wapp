@@ -5,6 +5,7 @@
 div.container {
   @include Debug();
   @include Rectangle(20vw, 100vh);
+  @include Flex();
 
   & > div.profile_image {
     @include Debug();
