@@ -21,8 +21,6 @@ func (a *App) LoginToAccount(ctx context.Context, username, password string) err
 
 	logger.Info().Msg("Got a request to log in user")
 
-	user, err := a.userStore.
-
 	return nil
 }
 

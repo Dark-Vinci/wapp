@@ -20,7 +20,7 @@ const packageName string = "account.app"
 //go:generate mockgen -source app.go -destination ./mock/mock_app.go -package mock  Operations
 type Operations interface {
 	Logout(ctx context.Context) error
-	//Register(ctx context.Context, details LoginRequest) (*account.User, error)
+	// GENERATE OTP;
 	VerifyOTP(ctx context.Context, otp string) error
 	DeleteUserAccount(ctx context.Context, userID uuid.UUID) error
 	CreateUser(ctx context.Context, user models.User) (*models.User, error)

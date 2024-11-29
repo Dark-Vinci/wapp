@@ -9,6 +9,7 @@ import (
 	"github.com/dark-vinci/wapp/backend/gateway/handlers/api"
 	"github.com/dark-vinci/wapp/backend/gateway/handlers/websocket"
 	"github.com/dark-vinci/wapp/backend/gateway/middleware"
+	"github.com/dark-vinci/wapp/backend/sdk/constants"
 )
 
 const packageName = "gateway.handlers"
@@ -22,12 +23,12 @@ type Handler struct {
 }
 
 func New(e *env.Environment, log zerolog.Logger) *Handler {
-	a := app.New()
+	a := app.New(&log, e)
 
 	r := gin.Default()
 	mw := middleware.New(log, e, a)
 
-	logger := log.With().Str("PACKAGE", packageName).Logger()
+	logger := log.With().Str(constants.PackageStrHelper, packageName).Logger()
 
 	return &Handler{
 		env:        e,

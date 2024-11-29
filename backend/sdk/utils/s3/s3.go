@@ -21,6 +21,12 @@ type MediaStore interface {
 	Get(key, bucket string) (*string, error)
 }
 
+func NewS3(region string) *S3 {
+	sess := session.Must(session.NewSession(&aws.Config{Region: aws.String(region)}))
+
+	return &S3{region: region, sess: sess}
+}
+
 func (s *S3) Get(key, bucket string) (*string, error) {
 	svc := s3.New(s.sess)
 
