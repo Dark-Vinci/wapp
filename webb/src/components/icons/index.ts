@@ -1,4 +1,3 @@
-export {};
 export * from "./settings/index";
 export * from "./channel/index";
 export * from "./ai/index";
