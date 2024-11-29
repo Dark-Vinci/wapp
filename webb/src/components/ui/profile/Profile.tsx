@@ -1,6 +1,6 @@
 import { ChangeEventHandler, JSX } from "react";
 
-import { CheckIcon, EditIcon } from "@/components/icons";
+import { CameraIcon, CheckIcon, EditIcon } from "@/components/icons";
 
 import style from "./Profile.module.scss";
 
@@ -94,10 +94,12 @@ export function Profile({
         <p>Profile</p>
       </div>
 
-      <div className="profile_img">
+      <div className={style.profile_image}>
+        // add the pop list somewhere
         <img src={profileURL} alt="profile image" />
-        <div>
-          <div>icon photo</div>
+        <div className={style.overlay}>
+          <div></div>
+          <CameraIcon />
           <p>CHANGE YOUR PROFILE PHOTO</p>
         </div>
       </div>
@@ -106,12 +108,13 @@ export function Profile({
         <div className="details_container">
           <div>
             <div>{username}</div>
-            <div>
-              <p>
-                This is not your username or pin. The name will be visible to
-                your WhatsApp contacts
-              </p>
-            </div>
+          </div>
+
+          <div>
+            <p>
+              This is not your username or pin. The name will be visible to your
+              WhatsApp contacts
+            </p>
           </div>
 
           {/*about; either input or display*/}

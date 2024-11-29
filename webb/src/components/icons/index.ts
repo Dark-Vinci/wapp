@@ -6,3 +6,4 @@ export * from "./chat/index";
 export * from "./status/index";
 export * from "./check/index";
 export * from "./edit/index";
+export * from "./camera/index";

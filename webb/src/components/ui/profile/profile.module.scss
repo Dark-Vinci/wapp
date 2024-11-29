@@ -1,7 +1,27 @@
 @import "../../../scss/mixins/util.scss";
 @import "../../../scss/mixins/shape.scss";
+@import "../../../scss/constants/colors.scss";
 
 div.container {
   @include Debug();
   @include Rectangle(20vw, 100vh);
+
+  & > div.profile_image {
+    @include Debug();
+    @include Circle(200px);
+
+    & > div.overlay {
+      display: none;
+      @include Debug();
+      background-color: $transparent-black;
+
+      &:hover {
+        display: block;
+      }
+
+      & > p {
+        color: $white;
+      }
+    }
+  }
 }
