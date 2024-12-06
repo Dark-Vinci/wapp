@@ -1,11 +1,11 @@
 import { JSX, ReactNode } from 'react';
 
-interface IIfProps {
+interface IfProps {
   condition: boolean;
   element: ReactNode;
 }
 
-export function If({ condition, element }: IIfProps): JSX.Element {
+export function If({ condition, element }: IfProps): JSX.Element {
   if (!condition) {
     return null as unknown as JSX.Element;
   }
