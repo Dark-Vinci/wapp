@@ -3,6 +3,3 @@ import type { AppDispatch, RootState } from '@store';
 
 export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
 export const useAppSelector = useSelector.withTypes<RootState>();
-
-// const count = useAppSelector(state => state.counter.value)
-// const dispatch = useAppDispatch()
