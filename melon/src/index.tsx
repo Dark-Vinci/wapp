@@ -8,22 +8,28 @@ import {
   View,
 } from 'react-native';
 import { useState, JSX } from 'react';
+import { If } from '@/Components';
 
 export function Application(): JSX.Element {
   const [count, setCount] = useState(0);
 
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-      <Text>The value is: {count}</Text>
-      <Text>Platform: {Platform.OS}</Text>
-      <Text>
-        HEIGHT: {Dimensions.get('window').height}: WIDTH:
-        {Dimensions.get('window').width}
-      </Text>
-      <Button onPress={() => setCount(count + 1)} title={'The content'} />
-    </View>
+    <If
+      condition={false}
+      element={
+        <View style={styles.container}>
+          <Text>Open up App.tsx to start working on your app!</Text>
+          <StatusBar style="auto" />
+          <Text>The value is: {count}</Text>
+          <Text>Platform: {Platform.OS}</Text>
+          <Text>
+            HEIGHT: {Dimensions.get('window').height}: WIDTH:
+            {Dimensions.get('window').width}
+          </Text>
+          <Button onPress={() => setCount(count + 1)} title={'The content'} />
+        </View>
+      }
+    />
   );
 }
 
