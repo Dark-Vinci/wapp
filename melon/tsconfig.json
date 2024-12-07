@@ -33,10 +33,13 @@
     "baseUrl": ".",
     "lib": ["es2022", "dom"],
     "paths": {
-      "@components": ["./src/Component"],
+      "@components": ["./src/Components"],
       "@containers": ["./src/Containers"],
       "@store": ["./src/store"],
       "@hooks": ["./src/hooks"],
+      "@network": ["./src/network"],
+      "@constants": ["./src/constants"],
+      "@types": ["./src/types"],
       "@/*": ["./src/*"],
     }
   }
