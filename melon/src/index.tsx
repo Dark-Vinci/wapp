@@ -13,7 +13,10 @@ import { If } from '@components';
 import { WS } from '@network';
 import { Message, MESSAGES_TYPE } from '@types';
 
+// import { BACKEND_URL } from '@env';
+
 export function Application(): JSX.Element {
+  // console.log({ BACKEND_URL });
   const [count, setCount] = useState(0);
   const [messages, setMessages] = useState<any[]>([]);
   const wsManager = new WS('wss://your-websocket-server.com');
