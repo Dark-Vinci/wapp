@@ -7,6 +7,7 @@ import {
   contactReducers,
   activeChatReducer,
 } from './slices';
+import { apiSlice } from '@/store/slices/async/call';
 
 const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
     contacts: contactReducers,
     calls: callsReducer,
     activeChat: activeChatReducer,
+    [apiSlice.reducerPath]: apiSlice.reducer,
     // and many more actions
   },
   middleware: (getDefaultMiddleware) => {

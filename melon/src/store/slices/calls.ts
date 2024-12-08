@@ -1,6 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-export interface ICall {
+interface ICall {
   withUser: string;
   type: 'video' | 'audio';
   bound: 'incoming' | 'outgoing';
@@ -9,12 +9,22 @@ export interface ICall {
   profileURL: string;
 }
 
-const initialState: ICall[] = [];
+export interface ICalls {
+  data: ICall[];
+}
+
+const initialState: ICalls = {
+  data: [],
+};
 
 const callsSlice = createSlice({
   initialState: initialState,
   name: 'CALLS',
-  reducers: {},
+  reducers: {
+    saveCallData(state, action: PayloadAction<any>) {
+      state.data = action.payload;
+    },
+  },
 });
 
 export const callsReducer = callsSlice.reducer;

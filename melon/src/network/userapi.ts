@@ -19,7 +19,33 @@ export class UserApi {
     }
   }
 
-  public async loginUser(userData: any) {
+  private handleError(error: AxiosError): void {
+    if (error.request) {
+      console.log({ error });
+      return;
+      // return Promise.reject(error);
+    }
+
+    if ((error as AxiosError).response) {
+      console.log({ error });
+      return;
+      // return Promise.reject(error);
+    }
+  }
+
+  public async createAccount(userData: any): Promise<any> {
+    const signupURL = `${this.backendBaseURL}/signup`;
+
+    try {
+      const response = await axios.post(signupURL, userData);
+
+      return response as unknown as { token: string };
+    } catch (error: unknown) {
+      this.handleError(error as AxiosError);
+    }
+  }
+
+  public async loginUser(userData: any): Promise<any> {
     const loginURL = `${this.backendBaseURL}/login`;
 
     try {
@@ -27,17 +53,7 @@ export class UserApi {
 
       return response as unknown as { token: string };
     } catch (error: unknown) {
-      if ((error as AxiosError).request) {
-        console.log({ error });
-        return Promise.reject(error);
-      }
-
-      if ((error as AxiosError).response) {
-        console.log({ error });
-        return Promise.reject(error);
-      }
-
-      return Promise.reject(error);
+      this.handleError(error as AxiosError);
     }
   }
 }
