@@ -2,19 +2,28 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { AppApi } from '@network';
 
-export class ToolKitAuthAsync {
-  public static loginUser(net: AppApi) {
-    return createAsyncThunk('user/login', async (userData: any, {}) => {
-      try {
-        const res = await net.userApi.loginUser(userData);
+export const createLoginUser = createAsyncThunk(
+  'user/login',
+  async (userData: any, {}) => {
+    try {
+      const res = await AppApi.userApi.loginUser(userData);
 
-        return res.data.user;
-      } catch (err: unknown) {
-        console.log({ err });
+      return res.data.user;
+    } catch (err: unknown) {
+      console.log({ err });
+    }
+  },
+);
 
-        // We got validation errors, let's return those so we can reference in our component and set form errors
-        // return rejectWithValue(error.response.data);
-      }
-    });
-  }
-}
+export const createUserAccount = createAsyncThunk(
+  'user/register',
+  async (data: any, {}) => {
+    try {
+      const res = await AppApi.userApi.createAccount(data);
+
+      return res.data.user;
+    } catch (err: unknown) {
+      console.log({ err });
+    }
+  },
+);

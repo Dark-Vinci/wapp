@@ -1,13 +1,12 @@
 import axios from 'axios';
 
+import { BACKEND_URL } from '@env';
 import { UserApi } from './userapi';
 
 export class AppApi {
-  public userApi: UserApi;
+  public static userApi: UserApi = new UserApi(BACKEND_URL, axios.create({}));
 
   public constructor(serverURL: string) {
-    const axiosInstance = axios.create({ baseURL: serverURL });
-
-    this.userApi = new UserApi(serverURL, axiosInstance);
+    console.log({ serverURL });
   }
 }
