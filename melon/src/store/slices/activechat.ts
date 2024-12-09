@@ -28,9 +28,7 @@ const initialState: IActiveChat = {
 const activeChatSlice = createSlice({
   initialState: initialState,
   name: 'ACTIVE_CHAT',
-  reducers: {
-    archive: function () {},
-  },
+  reducers: {},
 });
 
 export const activeChatReducer = activeChatSlice.reducer;

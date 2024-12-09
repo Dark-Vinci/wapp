@@ -4,8 +4,8 @@ import { JSX } from 'react';
 
 export function WhatsappIcon(): JSX.Element {
   return (
-    <View style={{}}>
-      <FontAwesome name="whatsapp" size={24} color="black" />
+    <View style={{ backgroundColor: 'green' }}>
+      <FontAwesome name="whatsapp" size={24} color="white" />
     </View>
   );
 }

@@ -9,13 +9,14 @@ import {
 } from 'react-native';
 import { useState, JSX, useEffect } from 'react';
 
-import { If } from '@components';
+import { If, WhatsappIcon } from '@components';
 import { WS } from '@network';
 import { Message, MESSAGES_TYPE } from '@types';
 
 import { BACKEND_URL } from '@env';
 
 export function Application(): JSX.Element {
+  console.log({ BACKEND_URL });
   const [count, setCount] = useState(0);
   const [messages, setMessages] = useState<any[]>([]);
   const wsManager = new WS(`wss://${BACKEND_URL}/ws`);
@@ -51,12 +52,14 @@ export function Application(): JSX.Element {
   console.log({ messages, count, sendMessage });
 
   let condition = Math.floor(Math.random()) < 0.5;
+  console.log({ condition });
 
   return (
     <If
       condition={condition}
       element={
         <View style={styles.container}>
+          <WhatsappIcon />
           <Text>Open up App.tsx to start working on your app!</Text>
           <StatusBar style="auto" />
           <Text>The value is: {count}</Text>
