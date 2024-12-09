@@ -12,7 +12,6 @@ import { useState, JSX, useEffect } from 'react';
 import { If, WhatsappIcon } from '@components';
 import { WS } from '@network';
 import { Message, MESSAGES_TYPE } from '@types';
-
 import { BACKEND_URL } from '@env';
 
 export function Application(): JSX.Element {
