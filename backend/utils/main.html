@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Canvas Grid</title>
+</head>
+<body>
+
+<canvas id="myCanvas" width="9000" height="9000"></canvas>
+
+<!--<canvas id="webglCanvas" width="800" height="600"></canvas>-->
+<!--<script>-->
+<!--    const canvas = document.getElementById('webglCanvas');-->
+<!--    const gl = canvas.getContext('webgl');-->
+
+<!--    if (!gl) {-->
+<!--        console.error('WebGL not supported');-->
+<!--    }-->
+
+<!--    // Clear the canvas with a black color-->
+<!--    gl.clearColor(0.0, 0.0, 0.0, 1.0);-->
+<!--    gl.clear(gl.COLOR_BUFFER_BIT);-->
+<!--</script>-->
+
+
+<script>
+    var canvas = document.getElementById("myCanvas");
+    var ctx = canvas.getContext("2d");
+
+    // Grid dimensions
+    var rows = 1000;
+    var cols = 1000;
+
+
+    // Calculate cell size
+    var cellWidth = canvas.width / cols;
+    var cellHeight = canvas.height / rows;
+
+    function colorCell(row, col) {
+        ctx.fillStyle = "red"; // Set the fill color
+        ctx.fillRect(col * cellWidth, row * cellHeight, cellWidth, cellHeight);
+    }
+
+    // Example: Color the cell at row 2, column 1
+    // colorCell(2, 1);
+
+    // canvas.addEventListener("click", function(event) {
+    //     // Get mouse coordinates
+    //     var rect = canvas.getBoundingClientRect();
+    //     var mouseX = event.clientX - rect.left;
+    //     var mouseY = event.clientY - rect.top;
+    //
+    //     // Calculate row and column of clicked cell
+    //     var col = Math.floor(mouseX / cellWidth);
+    //     var row = Math.floor(mouseY / cellHeight);
+    //
+    //     // Color the clicked cell
+    //     colorCell(row, col);
+    // });
+
+    // Draw grid lines
+    for (var x = 0; x <= canvas.width; x += cellWidth) {
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, canvas.height);
+    }
+
+    for (var y = 0; y <= canvas.height; y += cellHeight) {
+        ctx.moveTo(0, y);
+        ctx.lineTo(canvas.width, y);
+    }
+
+    canvas.addEventListener("click", function(event) {
+        // Get mouse coordinates
+        var rect = canvas.getBoundingClientRect();
+        var mouseX = event.clientX - rect.left;
+        var mouseY = event.clientY - rect.top;
+
+        // Calculate row and column of clicked cell
+        var col = Math.floor(mouseX / cellWidth);
+        var row = Math.floor(mouseY / cellHeight);
+
+        // Color the clicked cell
+        colorCell(row, col);
+    });
+
+    ctx.strokeStyle = "green";
+    ctx.stroke();
+</script>
+
+</body>
+</html>

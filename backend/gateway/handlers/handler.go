@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"context"
+
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog"
 
@@ -39,7 +41,7 @@ func New(e *env.Environment, log zerolog.Logger) *Handler {
 	}
 }
 
-func (h *Handler) Build() {
+func (h *Handler) Build(ctx context.Context) {
 	gin.ForceConsoleColor()
 
 	h.engine.Use(h.middleware.Cors())
@@ -48,7 +50,7 @@ func (h *Handler) Build() {
 	api.Build(h.engine.Group("/api"))
 
 	// build endpoints for websocket
-	websocket.New(*h.log, h.env, h.engine.Group("/socket"))
+	websocket.New(ctx, *h.log, h.env, h.engine.Group("/socket"), h.app)
 }
 
 func (h *Handler) GetEngine() *gin.Engine {

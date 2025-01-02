@@ -19,6 +19,7 @@ import (
 
 func main() {
 	_ = os.Setenv("TZ", constants.TimeZone)
+	ctx := context.Background()
 
 	e := env.New()
 
@@ -31,7 +32,7 @@ func main() {
 	appLogger.Debug().Msg("another log in the logger file")
 
 	h := handlers.New(e, logger)
-	h.Build()
+	h.Build(ctx)
 
 	server := &http.Server{
 		Addr:    ":8080",

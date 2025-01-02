@@ -3,32 +3,48 @@ package websocket
 import (
 	"context"
 	"encoding/json"
-	"github.com/dark-vinci/wapp/backend/gateway/env"
+	"sync"
 
 	"github.com/google/uuid"
 	"github.com/rs/zerolog"
 
+	"github.com/dark-vinci/wapp/backend/gateway/app"
+	"github.com/dark-vinci/wapp/backend/gateway/env"
 	"github.com/dark-vinci/wapp/backend/sdk/constants"
 	"github.com/dark-vinci/wapp/backend/sdk/utils/redis"
 )
 
 type Hub struct {
+	app        *app.Operations
 	redis      redis.Operations
-	Clients    map[*Client]struct{}
+	Clients    map[string]*Client
 	Broadcast  chan []byte
 	Register   chan *Client
 	Unregister chan *Client
-	ServerName string
+	ctx        context.Context
+	ctxCancel  context.CancelFunc
+	mu         sync.Mutex
+	ServerName uuid.UUID
 	logger     zerolog.Logger
 }
 
-func NewHub(logger zerolog.Logger, e *env.Environment) *Hub {
+func NewHub(ctx context.Context, logger zerolog.Logger, e *env.Environment, app *app.Operations) *Hub {
 	red := redis.NewRedis(&logger, e.RedisURL, e.RedisPassword, e.RedisUsername)
 
+	c, cancel := context.WithCancel(ctx)
+
 	return &Hub{
+		app:        app,
 		logger:     logger,
-		ServerName: uuid.New().String(),
+		ServerName: uuid.New(),
 		redis:      *red,
+		ctx:        c,
+		ctxCancel:  cancel,
+		mu:         sync.Mutex{},
+		Clients:    make(map[string]*Client), // user_id -> client
+		Broadcast:  make(chan []byte),
+		Register:   make(chan *Client),
+		Unregister: make(chan *Client),
 	}
 }
 
@@ -49,7 +65,7 @@ func (h *Hub) Start() {
 				}
 
 				// ignore message sent by the same server
-				if c.Server != h.ServerName && len(c.Server) != 0 {
+				if c.Server != h.ServerName.String() && len(c.Server) != 0 {
 					h.Broadcast <- msg
 				}
 			}
@@ -58,14 +74,15 @@ func (h *Hub) Start() {
 
 	for {
 		select {
+
 		// register a client
 		case client := <-h.Register:
-			h.Clients[client] = struct{}{}
+			h.Clients[client.UserID] = client
 
 			//delete a client
 		case client := <-h.Unregister:
-			if _, ok := h.Clients[client]; ok {
-				delete(h.Clients, client)
+			if _, ok := h.Clients[client.UserID]; ok {
+				delete(h.Clients, client.UserID)
 				close(client.Send)
 			}
 
@@ -73,12 +90,12 @@ func (h *Hub) Start() {
 		case message := <-h.Broadcast:
 			// broadcast to other servers
 			go func() {
-				// todo: retry
+				// todo: retry -> MESSAGE MUST BE SENT, TRY AS MANY TIMES AS POSSIBLE
 				_ = h.redis.Broadcast(context.Background(), "redis-key", message)
 			}()
 
 			// todo: add go routine
-			for client := range h.Clients {
+			for _, client := range h.Clients {
 				select {
 				case client.Send <- message:
 					//todo: log the info
@@ -86,7 +103,7 @@ func (h *Hub) Start() {
 				default:
 					// if we cant send, close the send channel and delete client
 					close(client.Send)
-					delete(h.Clients, client)
+					delete(h.Clients, client.UserID)
 				}
 			}
 		}
