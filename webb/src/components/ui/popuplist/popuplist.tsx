@@ -1,46 +1,42 @@
 import { ReactNode } from "react";
 
 interface listItem {
-    key: string;
-    icon: ReactNode;
+  key: string;
+  icon: ReactNode;
 }
 
 interface popupList {
-    width: number;
-    top: listItem[];
-    bottom: Record<string, ReactNode>[];
+  width: number;
+  top: listItem[];
+  bottom: Record<string, ReactNode>[];
 }
 
-export function PopupList({top, bottom}: popupList): JSX.Element {
-    return (
-        <div>
-            <div>
-                {
-                    top.map((value, i) => {
-                        return (
-                            <div key={i}>
-                                <div>{value.icon}</div>
-                                <div>{value.key}</div>
-                            </div>
-                        )
-                    })
-                }
+export function PopupList({ top, bottom }: popupList): JSX.Element {
+  return (
+    <div>
+      <div>
+        {top.map((value, i) => {
+          return (
+            <div key={i}>
+              <div>{value.icon}</div>
+              <div>{value.key}</div>
             </div>
+          );
+        })}
+      </div>
 
-            <hr/>
+      <hr />
 
-            <div>
-                {
-                    bottom.map((value, i) => {
-                        return (
-                            <div key={i}>
-                                <div>{value.icon}</div>
-                                <div>{value.key}</div>
-                            </div>
-                        )
-                    })
-                }
+      <div>
+        {bottom.map((value, i) => {
+          return (
+            <div key={i}>
+              <div>{value.icon}</div>
+              <div>{value.key}</div>
             </div>
-        </div>
-    )
+          );
+        })}
+      </div>
+    </div>
+  );
 }

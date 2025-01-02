@@ -1,6 +1,6 @@
 import { JSX } from "react";
 
-import style from "./Menu.module.scss";
+import style from "./menu.module.scss";
 
 import {
   AiIcon,
